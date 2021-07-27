@@ -1,6 +1,8 @@
 package com.exam.controller;
 
 import com.exam.model.master.Subject;
+import com.exam.service.SubjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,28 +11,31 @@ import java.util.List;
 @RequestMapping("/subjects")
 public class SubjectController {
 
+    @Autowired
+    private SubjectService subjectService;
+
     @GetMapping("/")
     public List<Subject> getSubjects(){
-        return null;
+        return subjectService.getSubjects();
     }
 
     @PostMapping("/")
     public Subject addSubject(@RequestBody Subject subject){
-        return null;
+        return subjectService.addSubject(subject);
     }
 
     @GetMapping("/{id}")
     public Subject getSubject(@PathVariable("id") Integer subjectId){
-        return null;
+        return subjectService.getSubject(subjectId);
     }
 
     @DeleteMapping("/{id}")
     public boolean removeSubject(@PathVariable("id") Integer subjectId){
-        return false;
+        return subjectService.removeSubject(subjectId);
     }
 
     @PutMapping("/{id}")
     public boolean updateSubject(@PathVariable("id") Integer id, @RequestBody Subject subject){
-        return false;
+        return subjectService.updateSubject(id, subject);
     }
 }

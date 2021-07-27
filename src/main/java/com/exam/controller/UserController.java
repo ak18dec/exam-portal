@@ -1,6 +1,9 @@
 package com.exam.controller;
 
+import com.exam.exception.UserNotFoundException;
 import com.exam.model.admin.User;
+import com.exam.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,9 @@ import java.util.List;
 @CrossOrigin("*")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/test")
     public String test(){
         return "working fine...";
@@ -20,26 +26,27 @@ public class UserController {
 
     @GetMapping("/")
     public List<User> getAllUsers(){
-        return null;
+        return userService.getAllUsers();
     }
 
     @PostMapping("/")
-    public User addUser(@RequestBody User user){
-        return null;
+    public User addUser(@RequestBody User user) throws Exception {
+        return userService.createUser(user);
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<?> getUser(@PathVariable("username") String username) {
-        return null;
+    public ResponseEntity<?> getUser(@PathVariable("username") String username) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getUser(username));
     }
 
     @PutMapping("/{username}")
     public boolean updateUser(@PathVariable("username") String username, @RequestBody User user){
-        return false;
+        return userService.updateUser(username, user);
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId){
+    public boolean deleteUser(@PathVariable("userId") Long userId){
+        return userService.deleteUser(userId);
     }
 
     @ExceptionHandler(Exception.class)

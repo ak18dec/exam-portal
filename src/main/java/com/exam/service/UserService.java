@@ -2,6 +2,7 @@ package com.exam.service;
 
 import com.exam.constant.ExceptionConstants;
 import com.exam.exception.UserAlreadyExistsException;
+import com.exam.exception.UserNotFoundException;
 import com.exam.model.admin.User;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,15 @@ public class UserService {
 
     public List<User> getAllUsers(){
         return users;
+    }
+
+    public User getUser(String username) throws UserNotFoundException {
+        Optional<User> usr = users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
+        if(usr.isPresent()){
+            return usr.get();
+        }else{
+            throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND+username);
+        }
     }
 
     public boolean deleteUser(Long userId) {
