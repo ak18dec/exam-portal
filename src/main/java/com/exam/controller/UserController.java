@@ -1,4 +1,4 @@
-package com.exam.constant;
+package com.exam.controller;
 
 public class UserController {
 }
