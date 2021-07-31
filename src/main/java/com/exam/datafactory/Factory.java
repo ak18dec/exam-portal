@@ -18,7 +18,7 @@ public class Factory {
     public static List<Subject> subjects = new ArrayList<>();
 
     public static List<Role> createRoles(){
-        roles.addAll(Arrays.asList(new Role(1L, "ADMIN"), new Role(2L, "BASIC")));
+        roles.addAll(Arrays.asList(new Role(1, "ADMIN"), new Role(2, "BASIC")));
         return roles;
     }
 

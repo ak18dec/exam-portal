@@ -2,22 +2,22 @@ package com.exam.model.admin;
 
 public class Role {
 
-    private Long id;
+    private Integer id;
     private String roleName;
 
     public Role() {
     }
 
-    public Role(Long id, String roleName) {
+    public Role(Integer id, String roleName) {
         this.id = id;
         this.roleName = roleName;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

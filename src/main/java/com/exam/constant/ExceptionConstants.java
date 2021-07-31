@@ -11,4 +11,8 @@ public final class ExceptionConstants {
     public static final String USER_ALREADY_EXISTS = "User already exists with username: ";
     public static final String TOKEN_EXPIRED = "Token has expired";
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
+    public static final String UNAUTHORIZED_REQUEST = "Unauthorized request";
+    public static final String INVALID_TOKEN_NOT_START_WITH_BEARER = "Invalid token, not start with bearer string";
+    public static final String INVALID_TOKEN = "Token is not valid";
+    public static final String USER_IS_DISABLED = "User is disabled";
 }

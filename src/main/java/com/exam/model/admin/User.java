@@ -1,6 +1,16 @@
 package com.exam.model.admin;
 
-public class User {
+import com.exam.model.security.Authority;
+import com.exam.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+public class User implements UserDetails {
 
     private Long id;
     private String username;
@@ -11,6 +21,8 @@ public class User {
     private String phone;
     private boolean enabled = true;
     private String profile;
+
+    private Set<Role> userRoles = new HashSet<>();
 
     public User() {
     }
@@ -115,4 +127,28 @@ public class User {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        Set<Authority> authorities = new HashSet<>();
+
+        userRoles.forEach(u -> authorities.add(new Authority(u.getRoleName())));
+
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }
