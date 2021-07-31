@@ -5,6 +5,8 @@ import com.exam.model.admin.User;
 import com.exam.model.admin.UserRole;
 import com.exam.model.master.Genre;
 import com.exam.model.master.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
