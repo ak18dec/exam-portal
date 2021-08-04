@@ -2,42 +2,42 @@ package com.exam.model.admin;
 
 public class UserRole {
 
-    private Long id;
-    private Long userId;
-    private Integer roleId;
+    private int id;
+    private int userId;
+    private int roleId;
 
 
 
     public UserRole() {
     }
 
-    public UserRole(Long id, Long userId, Integer roleId) {
+    public UserRole(int id, int userId, int roleId) {
         this.id = id;
         this.userId = userId;
         this.roleId = roleId;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public Integer getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 

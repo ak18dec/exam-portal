@@ -4,6 +4,8 @@ import com.exam.constant.ExceptionConstants;
 import com.exam.exception.UserAlreadyExistsException;
 import com.exam.exception.UserNotFoundException;
 import com.exam.model.admin.User;
+import com.exam.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,9 @@ import static com.exam.datafactory.Factory.users;
 @Service
 public class UserService {
 
+    @Autowired
+    private UserRepository userRepository;
+
     public User createUser(User user) throws Exception {
 
         Optional<User> local = users.stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny();
@@ -21,7 +26,6 @@ public class UserService {
         if(local.isPresent()){
             throw new UserAlreadyExistsException(ExceptionConstants.USER_ALREADY_EXISTS+local.get().getUsername());
         }else{
-            user.setId(users.size()+1L);
             users.add(user);
         }
 
@@ -41,8 +45,16 @@ public class UserService {
         }
     }
 
-    public boolean deleteUser(Long userId) {
-        return users.removeIf(u->u.getId().equals(userId));
+    public User getUserById(int id) throws UserNotFoundException {
+        User user = userRepository.findById(id);
+        if(user == null){
+            throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_ID+id);
+        }
+        return user;
+    }
+
+    public boolean deleteUser(int userId) {
+        return users.removeIf(u->u.getId() == userId);
     }
 
     public boolean updateUser(String username, User user){

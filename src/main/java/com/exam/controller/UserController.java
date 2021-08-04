@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/test")
     public String test(){
-        return "working fine...";
+        return "Users API is up and running...";
     }
 
     @GetMapping("/")
@@ -34,9 +34,14 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getUser(@PathVariable("username") String username) throws UserNotFoundException {
+    @GetMapping()
+    public ResponseEntity<?> getUser(@RequestParam(value = "username") String username) throws UserNotFoundException {
         return ResponseEntity.ok(userService.getUser(username));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable("id") Integer id) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PutMapping("/{username}")
@@ -45,12 +50,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public boolean deleteUser(@PathVariable("userId") Long userId){
+    public boolean deleteUser(@PathVariable("userId") Integer userId){
         return userService.deleteUser(userId);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> itemNotFEx(WebRequest webRequest, Exception e){
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 }

@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class User implements UserDetails {
 
-    private Long id;
+    private int id;
     private String username;
     private String password;
     private String firstName;
@@ -27,7 +27,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String username, String password, String firstName, String lastName, String email, String phone, boolean enabled, String profile) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, String phone, boolean enabled, String profile) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -39,11 +39,11 @@ public class User implements UserDetails {
         this.profile = profile;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
