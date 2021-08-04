@@ -44,9 +44,9 @@ public class LoginController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new UserDisabledException(ExceptionConstants.USER_IS_DISABLED + " : " + e.getMessage(), e);
+            throw new DisabledException(ExceptionConstants.USER_IS_DISABLED + " : " + e.getMessage(), e);
         } catch (BadCredentialsException e) {
-            throw new InvalidCredentialsException(ExceptionConstants.INVALID_CREDENTIALS + " : " + e.getMessage(), e);
+            throw new BadCredentialsException(ExceptionConstants.INVALID_CREDENTIALS);
         }
     }
 }

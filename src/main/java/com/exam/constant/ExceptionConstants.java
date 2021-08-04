@@ -7,7 +7,8 @@ public final class ExceptionConstants {
     private ExceptionConstants(){
     }
 
-    public static final String USER_NOT_FOUND = "User not found with username: ";
+    public static final String USER_NOT_FOUND = "User not found for username: ";
+    public static final String USER_NOT_FOUND_FOR_ID = "User not found for id: ";
     public static final String USER_ALREADY_EXISTS = "User already exists with username: ";
     public static final String TOKEN_EXPIRED = "Token has expired";
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
