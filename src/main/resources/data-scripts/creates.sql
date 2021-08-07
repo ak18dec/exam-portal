@@ -9,7 +9,7 @@
 --	password varchar(50) unique not null,
 --	first_name varchar(100) not null,
 --	last_name varchar(255),
---	email varchar(255) not null,
+--	email varchar(255) unique not null,
 --	phone varchar(255),
 --	enabled boolean not null,
 --	profile varchar(255),

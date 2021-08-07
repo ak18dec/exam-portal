@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
-import static com.exam.datafactory.Factory.users;
 
 @Service
 public class UserService {
@@ -19,34 +16,34 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User user) throws Exception {
+    public User createUser(User user, int loggedInUserId) throws Exception {
 
-        Optional<User> local = users.stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny();
+        final boolean userExistWithUsername = userRepository.userExistsByUsername(user.getUsername());
 
-        if(local.isPresent()){
-            throw new UserAlreadyExistsException(ExceptionConstants.USER_ALREADY_EXISTS+local.get().getUsername());
+        if(userExistWithUsername){
+            throw new UserAlreadyExistsException(ExceptionConstants.USER_ALREADY_EXISTS+user.getUsername());
         }else{
-            users.add(user);
+            int newUserId = userRepository.addUser(user, loggedInUserId);
+            user.setId(newUserId);
         }
 
         return user;
     }
 
     public List<User> getAllUsers(){
-        return users;
+        return userRepository.findAll();
     }
 
-    public User getUser(String username) throws UserNotFoundException {
-        Optional<User> usr = users.stream().filter(u -> u.getUsername().equals(username)).findFirst();
-        if(usr.isPresent()){
-            return usr.get();
-        }else{
+    public User getUserByUsername(String username) throws UserNotFoundException {
+        final User user = userRepository.findByUsername(username);
+        if(user == null){
             throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND+username);
         }
+        return user;
     }
 
     public User getUserById(int id) throws UserNotFoundException {
-        User user = userRepository.findById(id);
+        final User user = userRepository.findById(id);
         if(user == null){
             throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_ID+id);
         }
@@ -54,17 +51,22 @@ public class UserService {
     }
 
     public boolean deleteUser(int userId) {
-        return users.removeIf(u->u.getId() == userId);
+        return userRepository.delete(userId);
     }
 
-    public boolean updateUser(String username, User user){
-        for (int i=0; i<users.size();i++){
-            User u = users.get(i);
-            if(u.getUsername().equals(username)){
-                users.set(i, user);
-                return true;
-            }
-        }
-        return false;
+    public boolean deleteAllUsers() {
+        return userRepository.deleteAll();
+    }
+
+    public boolean updateUser(int id, User user, int loggedInUserId){
+        return userRepository.basicUpdate(id, user, loggedInUserId);
+    }
+
+    public boolean updateCredentials(int id, String username, String password, int loggedInUserId){
+        return userRepository.updateCredentials(id, username, password, loggedInUserId);
+    }
+
+    public boolean updateUserStatus(int id, boolean status, int loggedInUserId){
+        return userRepository.updateUserStatus(id, status, loggedInUserId);
     }
 }
