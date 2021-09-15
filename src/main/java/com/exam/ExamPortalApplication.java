@@ -1,8 +1,8 @@
 package com.exam;
 
-import com.exam.model.admin.Role;
-import com.exam.model.admin.User;
-import com.exam.repository.rowmappers.UserRowMapper;
+import com.exam.user.model.Role;
+import com.exam.user.model.User;
+import com.exam.user.repository.rowmappers.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
