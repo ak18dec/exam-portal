@@ -39,3 +39,17 @@
 --    description varchar(255),
 --    enabled boolean
 --)
+
+--create table proficiency(
+-- 	id serial primary key,
+-- 	level varchar(50) unique not null
+--);
+
+--insert into proficiency(level)
+--values ('Easy')
+--
+--insert into proficiency(level)
+--values ('Medium')
+--
+--insert into proficiency(level)
+--values ('Hard')
