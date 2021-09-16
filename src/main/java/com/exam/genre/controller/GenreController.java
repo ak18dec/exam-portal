@@ -1,6 +1,9 @@
 package com.exam.genre.controller;
 
+import com.exam.genre.exception.GenreAlreadyExistsException;
+import com.exam.genre.exception.GenreNotFoundException;
 import com.exam.genre.model.Genre;
+import com.exam.subject.exception.SubjectNotFoundException;
 import com.exam.subject.model.Subject;
 import com.exam.genre.service.GenreService;
 import com.exam.subject.service.SubjectService;
@@ -25,13 +28,13 @@ public class GenreController {
     }
 
     @PostMapping("/")
-    public Genre addGenre(@RequestBody Genre genre){
+    public Genre addGenre(@RequestBody Genre genre) throws GenreAlreadyExistsException {
         return genreService.addGenre(genre);
     }
 
     @GetMapping("/{id}")
-    public Genre getGenre(@PathVariable("id") Integer genreId){
-        return genreService.getGenre(genreId);
+    public Genre getGenre(@PathVariable("id") Integer genreId) throws GenreNotFoundException {
+        return genreService.getGenreById(genreId);
     }
 
     @DeleteMapping("/{id}")
@@ -45,8 +48,8 @@ public class GenreController {
     }
 
     @GetMapping("/{id}/subjects")
-    public List<Subject> getSubjectByGenre(@PathVariable("id") Integer id){
-        return subjectService.getSubjectByGenre(id);
+    public List<Subject> getSubjectByGenre(@PathVariable("id") Integer id) throws SubjectNotFoundException {
+        return subjectService.getSubjectsByGenreId(id);
     }
 
 

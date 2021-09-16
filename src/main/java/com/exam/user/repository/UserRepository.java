@@ -161,7 +161,7 @@ public class UserRepository extends BaseRepository {
         sql.append("last_name=:lastName,");
         sql.append("email=:email,");
         sql.append("phone=:phone,");
-        sql.append("modified_by=:loggedInUserId");
+        sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
         MapSqlParameterSource param = new MapSqlParameterSource("id",id)

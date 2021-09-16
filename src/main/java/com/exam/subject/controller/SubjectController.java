@@ -1,5 +1,7 @@
 package com.exam.subject.controller;
 
+import com.exam.subject.exception.SubjectAlreadyExistsException;
+import com.exam.subject.exception.SubjectNotFoundException;
 import com.exam.subject.model.Subject;
 import com.exam.subject.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,13 @@ public class SubjectController {
     }
 
     @PostMapping("/")
-    public Subject addSubject(@RequestBody Subject subject){
+    public Subject addSubject(@RequestBody Subject subject) throws SubjectAlreadyExistsException {
         return subjectService.addSubject(subject);
     }
 
     @GetMapping("/{id}")
-    public Subject getSubject(@PathVariable("id") Integer subjectId){
-        return subjectService.getSubject(subjectId);
+    public Subject getSubject(@PathVariable("id") Integer subjectId) throws SubjectNotFoundException {
+        return subjectService.getSubjectById(subjectId);
     }
 
     @DeleteMapping("/{id}")
