@@ -1,9 +1,8 @@
-package com.exam.genre.repository;
+package com.exam.instruction.repository;
 
 import com.exam.common.repository.BaseRepository;
-
-import com.exam.genre.model.Genre;
-import com.exam.genre.repository.rowmappers.GenreRowMapper;
+import com.exam.instruction.model.Instruction;
+import com.exam.instruction.repository.rowmappers.InstructionRowMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,26 +12,25 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class GenreRepository extends BaseRepository {
+public class InstructionRepository extends BaseRepository {
 
-    public static final StringBuilder FIND_SINGLE_GENRE_QUERY = new StringBuilder("SELECT * FROM genre WHERE ");
-    public static final StringBuilder FIND_ALL_GENRE_QUERY = new StringBuilder("SELECT * FROM genre");
+    public static final StringBuilder FIND_SINGLE_INSTRUCTION_QUERY = new StringBuilder("SELECT * FROM instruction WHERE ");
+    public static final StringBuilder FIND_ALL_INSTRUCTION_QUERY = new StringBuilder("SELECT * FROM instruction");
 
-    public static final StringBuilder DELETE_SINGLE_GENRE_QUERY = new StringBuilder("DELETE FROM genre WHERE ");
-    public static final StringBuilder DELETE_ALL_GENRE_QUERY = new StringBuilder("DELETE FROM genre");
-    public static final StringBuilder DELETE_LIST_OF_GENRE_QUERY = new StringBuilder("DELETE FROM genre WHERE ");
+    public static final StringBuilder DELETE_SINGLE_INSTRUCTION_QUERY = new StringBuilder("DELETE FROM instruction WHERE ");
+    public static final StringBuilder DELETE_ALL_INSTRUCTION_QUERY = new StringBuilder("DELETE FROM instruction");
+    public static final StringBuilder DELETE_LIST_OF_INSTRUCTION_QUERY = new StringBuilder("DELETE FROM instruction WHERE ");
 
     //CREATE QUERIES
 
-    public int addGenre(Genre genre){
-        final StringBuilder sql = new StringBuilder("INSERT INTO genre(title, description, enabled");
-        sql.append(" VALUES (:title,:description,:enabled");
+    public int addInstruction(Instruction instruction){
+        final StringBuilder sql = new StringBuilder("INSERT INTO instruction(content, enabled");
+        sql.append(" VALUES (:content, :enabled");
         sql.append(")");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("title", genre.getTitle());
-        param.addValue("description", genre.getDescription());
-        param.addValue("enabled", genre.isEnabled());
+        param.addValue("content", instruction.getContent());
+        param.addValue("enabled", instruction.isEnabled());
 
         try{
             return npJdbcTemplate.update(sql.toString(), param);
@@ -44,36 +42,36 @@ public class GenreRepository extends BaseRepository {
 
     //SELECT QUERIES
 
-    public Genre findById(int id){
-        final String sql = FIND_SINGLE_GENRE_QUERY.append("id=:id").toString();
+    public Instruction findById(int id){
+        final String sql = FIND_SINGLE_INSTRUCTION_QUERY.append("id=:id").toString();
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
-            return (Genre) npJdbcTemplate.queryForObject(sql, param, new GenreRowMapper());
+            return (Instruction) npJdbcTemplate.queryForObject(sql, param, new InstructionRowMapper());
         }catch (EmptyResultDataAccessException e){
             return null;
         }
     }
 
-    public Genre findByTitle(String title){
-        final String sql = FIND_SINGLE_GENRE_QUERY.append("title=:title").toString();
-        final SqlParameterSource param = new MapSqlParameterSource("title",title);
+    public Instruction findByContent(String content){
+        final String sql = FIND_SINGLE_INSTRUCTION_QUERY.append("content like %:content%").toString();
+        final SqlParameterSource param = new MapSqlParameterSource("content",content);
         try{
-            return (Genre) npJdbcTemplate.queryForObject(sql, param, new GenreRowMapper());
+            return (Instruction) npJdbcTemplate.queryForObject(sql, param, new InstructionRowMapper());
         }catch (EmptyResultDataAccessException e){
             return null;
         }
     }
 
-    public List<Genre> findAll(){
+    public List<Instruction> findAll(){
         try{
-            return npJdbcTemplate.query(FIND_ALL_GENRE_QUERY.toString(), new GenreRowMapper());
+            return npJdbcTemplate.query(FIND_ALL_INSTRUCTION_QUERY.toString(), new InstructionRowMapper());
         }catch (DataAccessException e){
             return null;
         }
     }
 
     public int findTotalCount(){
-        final String sql = "SELECT count(*) from genre;";
+        final String sql = "SELECT count(*) from instruction;";
         try{
             Integer count = npJdbcTemplate.queryForObject(sql, new MapSqlParameterSource(),Integer.class);
             return count != null ? count : 0 ;
@@ -82,9 +80,9 @@ public class GenreRepository extends BaseRepository {
         }
     }
 
-    public boolean genreExistsByTitle(String title){
-        final String sql = "SELECT EXISTS(SELECT 1 FROM genre where title=:title)";
-        MapSqlParameterSource param = new MapSqlParameterSource("title", title);
+    public boolean instructionExistsByContent(String content){
+        final String sql = "SELECT EXISTS(SELECT 1 FROM instruction where content=:content)";
+        MapSqlParameterSource param = new MapSqlParameterSource("content", content);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
         }catch (EmptyResultDataAccessException e){
@@ -95,7 +93,7 @@ public class GenreRepository extends BaseRepository {
     //DELETE QUERIES
 
     public boolean delete(int id) {
-        final String sql = DELETE_SINGLE_GENRE_QUERY.append("id=:id").toString();
+        final String sql = DELETE_SINGLE_INSTRUCTION_QUERY.append("id=:id").toString();
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -105,7 +103,7 @@ public class GenreRepository extends BaseRepository {
     }
 
     public boolean deleteByIds(List<Integer> ids){
-        final String sql = DELETE_LIST_OF_GENRE_QUERY.append("id in (:ids)").toString();
+        final String sql = DELETE_LIST_OF_INSTRUCTION_QUERY.append("id in (:ids)").toString();
         final SqlParameterSource param = new MapSqlParameterSource().addValue("ids", ids);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -115,7 +113,7 @@ public class GenreRepository extends BaseRepository {
     }
 
     public boolean deleteAll(){
-        final String sql = DELETE_ALL_GENRE_QUERY.toString();
+        final String sql = DELETE_ALL_INSTRUCTION_QUERY.toString();
         final SqlParameterSource param = new MapSqlParameterSource();
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -126,17 +124,15 @@ public class GenreRepository extends BaseRepository {
 
     //UPDATE QUERIES
 
-    public boolean updateGenre(int id, Genre genre){
-        final StringBuilder sql = new StringBuilder("UPDATE genre SET ");
-        sql.append("title=:title,");
-        sql.append("description=:description,");
+    public boolean updateInstruction(int id, Instruction instruction){
+        final StringBuilder sql = new StringBuilder("UPDATE instruction SET ");
+        sql.append("content=:content,");
         sql.append("enabled=:enabled ");
         sql.append("WHERE id=:id");
 
         MapSqlParameterSource param = new MapSqlParameterSource("id",id)
-                .addValue("title", genre.getTitle())
-                .addValue("description", genre.getDescription())
-                .addValue("enabled", genre.isEnabled())
+                .addValue("content", instruction.getContent())
+                .addValue("enabled", instruction.isEnabled())
                 .addValue("id", id);
         try{
             return npJdbcTemplate.update(sql.toString(), param) > 0;

@@ -36,4 +36,8 @@ public final class ExceptionConstants {
     public static final String TOPIC_NOT_FOUND_FOR_TITLE = "Topic not found for title: ";
     public static final String TOPIC_NOT_FOUND_FOR_CATEGORY_ID = "Topic not found for categoryId: ";
     public static final String TOPIC_ALREADY_EXISTS = "Topic already exists with title: ";
+
+    public static final String INSTRUCTION_NOT_FOUND_FOR_ID = "Instruction not found for id: ";
+    public static final String INSTRUCTION_NOT_FOUND_FOR_CONTENT = "Instruction not found for content: ";
+    public static final String INSTRUCTION_ALREADY_EXISTS = "Instruction already exists with title: ";
 }

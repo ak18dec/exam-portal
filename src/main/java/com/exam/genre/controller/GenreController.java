@@ -33,7 +33,7 @@ public class GenreController {
     }
 
     @GetMapping("/{id}")
-    public Genre getGenre(@PathVariable("id") Integer genreId) throws GenreNotFoundException {
+    public Genre getGenreById(@PathVariable("id") Integer genreId) throws GenreNotFoundException {
         return genreService.getGenreById(genreId);
     }
 
