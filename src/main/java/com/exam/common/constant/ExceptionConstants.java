@@ -40,4 +40,9 @@ public final class ExceptionConstants {
     public static final String INSTRUCTION_NOT_FOUND_FOR_ID = "Instruction not found for id: ";
     public static final String INSTRUCTION_NOT_FOUND_FOR_CONTENT = "Instruction not found for content: ";
     public static final String INSTRUCTION_ALREADY_EXISTS = "Instruction already exists with title: ";
+
+    public static final String QUESTION_NOT_FOUND_FOR_ID = "Question not found for id: ";
+    public static final String QUESTION_NOT_FOUND_FOR_TITLE = "Question not found for title: ";
+    public static final String QUESTION_NOT_FOUND_FOR_TOPIC_ID = "Question not found for topicId: ";
+    public static final String QUESTION_ALREADY_EXISTS = "Question already exists with title: ";
 }

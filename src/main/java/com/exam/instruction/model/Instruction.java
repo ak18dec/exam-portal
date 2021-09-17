@@ -38,4 +38,13 @@ public class Instruction {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    @Override
+    public String toString() {
+        return "Instruction{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }
