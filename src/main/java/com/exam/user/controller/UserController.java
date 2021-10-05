@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable("id") Integer id) throws UserNotFoundException {
+    public ResponseEntity<?> getUserById(@PathVariable("userId") Integer id) throws UserNotFoundException {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -50,12 +50,12 @@ public class UserController {
     //PUT API
 
     @PutMapping("/{userId}")
-    public boolean updateUser(@PathVariable("id") int id, @RequestBody User user){
+    public boolean updateUser(@PathVariable("userId") int id, @RequestBody User user){
         return userService.updateUser(id, user, 1);
     }
 
     @PatchMapping("/{userId}")
-    public boolean updateCredentials(@PathVariable("id") int id,@RequestBody User user){
+    public boolean updateCredentials(@PathVariable("userId") int id,@RequestBody User user){
         final String username = user.getUsername();
         final String password = user.getPassword();
         return userService.updateCredentials(id, username, password,1);
