@@ -14,12 +14,8 @@ import java.util.List;
 @Repository
 public class UserRepository extends BaseRepository {
 
-    public static final StringBuilder FIND_SINGLE_USER_QUERY = new StringBuilder("SELECT * FROM users WHERE ");
     public static final StringBuilder FIND_ALL_USERS_QUERY = new StringBuilder("SELECT * FROM users");
-
-    public static final StringBuilder DELETE_SINGLE_USER_QUERY = new StringBuilder("DELETE FROM users WHERE ");
     public static final StringBuilder DELETE_ALL_USERS_QUERY = new StringBuilder("DELETE FROM users");
-    public static final StringBuilder DELETE_LIST_OF_USERS_QUERY = new StringBuilder("DELETE FROM users WHERE ");
 
     //CREATE QUERIES
 
@@ -53,7 +49,7 @@ public class UserRepository extends BaseRepository {
     //SELECT QUERIES
 
     public User findById(int id){
-        final String sql = FIND_SINGLE_USER_QUERY.append("id=:id").toString();
+        final String sql = "SELECT * FROM users WHERE id=:id";
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
@@ -63,7 +59,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public User findByUsername(String username){
-        final String sql = FIND_SINGLE_USER_QUERY.append("username=:username").toString();
+        final String sql = "SELECT * FROM users WHERE username=:username";
         final SqlParameterSource param = new MapSqlParameterSource("username",username);
         try{
             return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
@@ -83,7 +79,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public User findByEmail(String email){
-        final String sql = FIND_SINGLE_USER_QUERY.append("email=:email").toString();
+        final String sql = "SELECT * FROM users WHERE email=:email";
         final SqlParameterSource param = new MapSqlParameterSource("email",email);
         try{
             return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
@@ -93,7 +89,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public User findByName(String name){
-        final String sql = FIND_SINGLE_USER_QUERY.append("first_name=:name OR last_name=:name").toString();
+        final String sql = "SELECT * FROM users WHERE first_name=:name OR last_name=:name";
         final SqlParameterSource param = new MapSqlParameterSource("name",name);
         try{
             return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
@@ -123,7 +119,7 @@ public class UserRepository extends BaseRepository {
     //DELETE QUERIES
 
     public boolean delete(int id) {
-        final String sql = DELETE_SINGLE_USER_QUERY.append("id=:id").toString();
+        final String sql = "DELETE FROM users WHERE id=:id";
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -133,7 +129,7 @@ public class UserRepository extends BaseRepository {
     }
 
     public boolean deleteByIds(List<Integer> ids){
-        final String sql = DELETE_LIST_OF_USERS_QUERY.append("id in (:ids)").toString();
+        final String sql = "DELETE FROM users WHERE id in (:ids)";
         final SqlParameterSource param = new MapSqlParameterSource().addValue("ids", ids);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
