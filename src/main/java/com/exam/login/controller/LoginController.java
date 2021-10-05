@@ -48,4 +48,9 @@ public class LoginController {
             throw new BadCredentialsException(ExceptionConstants.INVALID_CREDENTIALS);
         }
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Application is running.....";
+    }
 }
