@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,10 +22,10 @@ public class UserRepository extends BaseRepository {
 
     public int addUser(User user, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("INSERT INTO users(username, password, first_name, last_name");
-        sql.append(", email, phone, enabled, profile, created_by, modified_by ");
-        sql.append(" VALUES (:username,:password,:firstName,:lastName,:email, :phone");
-        sql.append(",:enabled, :profile, :createdBy,:modifiedBy");
-        sql.append(")");
+        sql.append(", email, phone, enabled, profile, created_by, modified_by) ");
+        sql.append(" VALUES (:username, :password, :firstName, :lastName, :email, :phone");
+        sql.append(", :enabled, :profile, :createdBy, :modifiedBy");
+        sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("username", user.getUsername());
@@ -39,7 +40,9 @@ public class UserRepository extends BaseRepository {
         param.addValue("modifiedBy", loggedInUserId);
 
         try{
-            return npJdbcTemplate.update(sql.toString(), param);
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            npJdbcTemplate.update(sql.toString(), param, generatedKeyHolder);
+            return generatedKeyHolder.getKey().intValue();
         }catch (EmptyResultDataAccessException e){
             return -1;
         }
