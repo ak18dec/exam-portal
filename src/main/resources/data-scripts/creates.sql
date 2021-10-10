@@ -33,11 +33,15 @@
 --ADD CONSTRAINT fk_user_role_roles
 --FOREIGN KEY (role_id) REFERENCES roles(id);
 
---CREATE TABLE genre (
+--CREATE TABLE genres (
 --    id serial primary key,
 --    title varchar(100),
 --    description varchar(255),
 --    enabled boolean
+--	  created_by int not null,
+--	  created_on timestamp default current_timestamp,
+--	  modified_by int not null,
+--	  modified_on timestamp default current_timestamp
 --)
 
 --create table proficiency(

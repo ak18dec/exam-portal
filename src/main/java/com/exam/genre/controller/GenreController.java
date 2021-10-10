@@ -30,7 +30,7 @@ public class GenreController {
 
     @PostMapping("/")
     public Genre addGenre(@RequestBody Genre genre) throws GenreAlreadyExistsException {
-        return genreService.addGenre(genre);
+        return genreService.addGenre(genre, 1);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class GenreController {
 
     @PutMapping("/{id}")
     public boolean updateGenre(@RequestBody Genre genre, @PathVariable("id") Integer id){
-        return genreService.updateGenre(id, genre);
+        return genreService.updateGenre(id, genre, 1);
     }
 
     @GetMapping("/{id}/subjects")

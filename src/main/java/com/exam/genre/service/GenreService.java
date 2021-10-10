@@ -22,13 +22,13 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
-    public Genre addGenre(Genre genre) throws GenreAlreadyExistsException {
+    public Genre addGenre(Genre genre, int loggedInUserId) throws GenreAlreadyExistsException {
         final boolean genreExistWithTitle = genreRepository.genreExistsByTitle(genre.getTitle());
 
         if(genreExistWithTitle){
             throw new GenreAlreadyExistsException(GENRE_ALREADY_EXISTS+genre.getTitle());
         }else{
-            int newGenreId = genreRepository.addGenre(genre);
+            int newGenreId = genreRepository.addGenre(genre, loggedInUserId);
             genre.setId(newGenreId);
         }
 
@@ -63,7 +63,7 @@ public class GenreService {
         return genreRepository.deleteByIds(ids);
     }
 
-    public boolean updateGenre(Integer id, Genre genre){
-        return genreRepository.updateGenre(id, genre);
+    public boolean updateGenre(Integer id, Genre genre, int loggedInUserId){
+        return genreRepository.updateGenre(id, genre, loggedInUserId);
     }
 }
