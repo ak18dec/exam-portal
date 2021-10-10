@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/instructions")
+@CrossOrigin("*")
 public class InstructionController {
 
     @Autowired
