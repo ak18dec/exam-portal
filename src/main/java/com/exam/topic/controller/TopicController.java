@@ -24,7 +24,7 @@ public class TopicController {
 
     @PostMapping("/")
     public Topic addTopic(@RequestBody Topic topic) throws TopicAlreadyExistsException {
-        return topicService.addTopic(topic);
+        return topicService.addTopic(topic, 1);
     }
 
     @GetMapping("/{id}")
@@ -39,6 +39,6 @@ public class TopicController {
 
     @PutMapping("/{id}")
     public boolean updateTopic(@PathVariable("id") Integer id, @RequestBody Topic topic){
-        return topicService.updateTopic(id, topic);
+        return topicService.updateTopic(id, topic, 1);
     }
 }

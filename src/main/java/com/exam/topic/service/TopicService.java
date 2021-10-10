@@ -22,13 +22,13 @@ public class TopicService {
         return topicRepository.findAll();
     }
 
-    public Topic addTopic(Topic topic) throws TopicAlreadyExistsException {
+    public Topic addTopic(Topic topic, int loggedInUserId) throws TopicAlreadyExistsException {
         final boolean topicExistWithTitle = topicRepository.topicExistsByTitle(topic.getTitle());
 
         if(topicExistWithTitle){
             throw new TopicAlreadyExistsException(TOPIC_ALREADY_EXISTS+topic.getTitle());
         }else{
-            int newTopicId = topicRepository.addTopic(topic);
+            int newTopicId = topicRepository.addTopic(topic, loggedInUserId);
             topic.setId(newTopicId);
         }
 
@@ -71,7 +71,7 @@ public class TopicService {
         return topicRepository.deleteByIds(ids);
     }
 
-    public boolean updateTopic(Integer id, Topic topic){
-        return topicRepository.updateTopic(id, topic);
+    public boolean updateTopic(Integer id, Topic topic, int loggedInUserId){
+        return topicRepository.updateTopic(id, topic, loggedInUserId);
     }
 }
