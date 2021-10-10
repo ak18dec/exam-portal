@@ -21,7 +21,7 @@ public class SubjectRepository extends BaseRepository {
     //CREATE QUERIES
 
     public int addSubject(Subject subject, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO subject(title, description, enabled, genre_id, created_by, modified_by)");
+        final StringBuilder sql = new StringBuilder("INSERT INTO subjects(title, description, enabled, genre_id, created_by, modified_by)");
         sql.append(" VALUES (:title,:description,:enabled,:genreId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 

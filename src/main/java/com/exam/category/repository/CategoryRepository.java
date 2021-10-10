@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,28 +15,28 @@ import java.util.List;
 @Repository
 public class CategoryRepository extends BaseRepository {
 
-    public static final StringBuilder FIND_SINGLE_CATEGORY_QUERY = new StringBuilder("SELECT * FROM category WHERE ");
-    public static final StringBuilder FIND_ALL_CATEGORY_QUERY = new StringBuilder("SELECT * FROM category");
-
-    public static final StringBuilder DELETE_SINGLE_CATEGORY_QUERY = new StringBuilder("DELETE FROM category WHERE ");
-    public static final StringBuilder DELETE_ALL_CATEGORY_QUERY = new StringBuilder("DELETE FROM category");
-    public static final StringBuilder DELETE_LIST_OF_CATEGORY_QUERY = new StringBuilder("DELETE FROM category WHERE ");
+    public static final StringBuilder FIND_ALL_CATEGORY_QUERY = new StringBuilder("SELECT * FROM categories");
+    public static final StringBuilder DELETE_ALL_CATEGORY_QUERY = new StringBuilder("DELETE FROM categories");
 
     //CREATE QUERIES
 
-    public int addCategory(Category category){
-        final StringBuilder sql = new StringBuilder("INSERT INTO category(title, description, enabled, subject_id");
-        sql.append(" VALUES (:title,:description,:enabled,:subjectId");
-        sql.append(")");
+    public int addCategory(Category category, int loggedInUserId){
+        final StringBuilder sql = new StringBuilder("INSERT INTO categories (title, description, enabled, subject_id, created_by, modified_by)");
+        sql.append(" VALUES (:title,:description,:enabled,:subjectId, :createdBy, :modifiedBy");
+        sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", category.getTitle());
         param.addValue("description", category.getDescription());
         param.addValue("enabled", category.isEnabled());
         param.addValue("subjectId", category.getSubjectId());
+        param.addValue("createdBy", loggedInUserId);
+        param.addValue("modifiedBy", loggedInUserId);
 
         try{
-            return npJdbcTemplate.update(sql.toString(), param);
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            npJdbcTemplate.update(sql.toString(), param, generatedKeyHolder);
+            return generatedKeyHolder.getKey().intValue();
         }catch (EmptyResultDataAccessException e){
             return -1;
         }
@@ -45,7 +46,7 @@ public class CategoryRepository extends BaseRepository {
     //SELECT QUERIES
 
     public Category findById(int id){
-        final String sql = FIND_SINGLE_CATEGORY_QUERY.append("id=:id").toString();
+        final String sql = "SELECT * FROM categories WHERE id=:id";
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return (Category) npJdbcTemplate.queryForObject(sql, param, new CategoryRowMapper());
@@ -55,7 +56,7 @@ public class CategoryRepository extends BaseRepository {
     }
 
     public Category findByTitle(String title){
-        final String sql = FIND_SINGLE_CATEGORY_QUERY.append("title=:title").toString();
+        final String sql = "SELECT * FROM categories WHERE title=:title";
         final SqlParameterSource param = new MapSqlParameterSource("title",title);
         try{
             return (Category) npJdbcTemplate.queryForObject(sql, param, new CategoryRowMapper());
@@ -73,7 +74,7 @@ public class CategoryRepository extends BaseRepository {
     }
 
     public int findTotalCount(){
-        final String sql = "SELECT count(*) from category;";
+        final String sql = "SELECT count(*) from categories;";
         try{
             Integer count = npJdbcTemplate.queryForObject(sql, new MapSqlParameterSource(),Integer.class);
             return count != null ? count : 0 ;
@@ -83,7 +84,7 @@ public class CategoryRepository extends BaseRepository {
     }
 
     public List<Category> findBySubjectId(Integer subjectId) {
-        final String sql = FIND_SINGLE_CATEGORY_QUERY.append("subject_id=:subjectId").toString();
+        final String sql = "SELECT * FROM categories WHERE subject_id=:subjectId";
         final SqlParameterSource param = new MapSqlParameterSource("subjectId",subjectId);
         try{
             return npJdbcTemplate.query(sql, param, new CategoryRowMapper());
@@ -93,7 +94,7 @@ public class CategoryRepository extends BaseRepository {
     }
 
     public boolean categoryExistsByTitle(String title){
-        final String sql = "SELECT EXISTS(SELECT 1 FROM category where title=:title)";
+        final String sql = "SELECT EXISTS(SELECT 1 FROM categories where title=:title)";
         MapSqlParameterSource param = new MapSqlParameterSource("title", title);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
@@ -105,7 +106,7 @@ public class CategoryRepository extends BaseRepository {
     //DELETE QUERIES
 
     public boolean delete(int id) {
-        final String sql = DELETE_SINGLE_CATEGORY_QUERY.append("id=:id").toString();
+        final String sql = "DELETE FROM categories WHERE id=:id";
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -115,7 +116,7 @@ public class CategoryRepository extends BaseRepository {
     }
 
     public boolean deleteByIds(List<Integer> ids){
-        final String sql = DELETE_LIST_OF_CATEGORY_QUERY.append("id in (:ids)").toString();
+        final String sql = "DELETE FROM categories WHERE id in (:ids)";
         final SqlParameterSource param = new MapSqlParameterSource().addValue("ids", ids);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -136,12 +137,13 @@ public class CategoryRepository extends BaseRepository {
 
     //UPDATE QUERIES
 
-    public boolean updateCategory(int id, Category category){
+    public boolean updateCategory(int id, Category category, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("UPDATE category SET ");
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");
         sql.append("subject_id=:subjectId ");
+        sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
         MapSqlParameterSource param = new MapSqlParameterSource("id",id)
@@ -149,7 +151,8 @@ public class CategoryRepository extends BaseRepository {
                 .addValue("description", category.getDescription())
                 .addValue("enabled", category.isEnabled())
                 .addValue("subjectId", category.getSubjectId())
-                .addValue("id", id);
+                .addValue("id", id)
+                .addValue("loggedInUserId", loggedInUserId);
         try{
             return npJdbcTemplate.update(sql.toString(), param) > 0;
         }catch (DataAccessException e){

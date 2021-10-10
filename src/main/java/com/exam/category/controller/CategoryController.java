@@ -24,7 +24,7 @@ public class CategoryController {
 
     @PostMapping("/")
     public Category addCategory(@RequestBody Category category) throws CategoryAlreadyExistsException {
-        return categoryService.addCategory(category);
+        return categoryService.addCategory(category, 1);
     }
 
     @GetMapping("/{id}")
@@ -39,6 +39,6 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public boolean updateCategory(@PathVariable("id") Integer id, @RequestBody Category category){
-        return categoryService.updateCategory(id, category);
+        return categoryService.updateCategory(id, category, 1);
     }
 }

@@ -21,13 +21,13 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Category addCategory(Category category) throws CategoryAlreadyExistsException {
+    public Category addCategory(Category category, int loggedInUserId) throws CategoryAlreadyExistsException {
         final boolean categoryExistWithTitle = categoryRepository.categoryExistsByTitle(category.getTitle());
 
         if(categoryExistWithTitle){
             throw new CategoryAlreadyExistsException(CATEGORY_ALREADY_EXISTS+category.getTitle());
         }else{
-            int newCategoryId = categoryRepository.addCategory(category);
+            int newCategoryId = categoryRepository.addCategory(category, loggedInUserId);
             category.setId(newCategoryId);
         }
 
@@ -70,7 +70,7 @@ public class CategoryService {
         return categoryRepository.deleteByIds(ids);
     }
 
-    public boolean updateCategory(Integer id, Category category){
-        return categoryRepository.updateCategory(id, category);
+    public boolean updateCategory(Integer id, Category category, int loggedInUserId){
+        return categoryRepository.updateCategory(id, category, loggedInUserId);
     }
 }
