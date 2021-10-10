@@ -24,7 +24,7 @@ public class InstructionController {
 
     @PostMapping("/")
     public Instruction addInstruction(@RequestBody Instruction instruction) throws InstructionAlreadyExistsException {
-        return instructionService.addInstruction(instruction);
+        return instructionService.addInstruction(instruction, 1);
     }
 
     @GetMapping("/{id}")
@@ -39,6 +39,6 @@ public class InstructionController {
 
     @PutMapping("/{id}")
     public boolean updateInstruction(@RequestBody Instruction instruction, @PathVariable("id") Integer id){
-        return instructionService.updateInstruction(id, instruction);
+        return instructionService.updateInstruction(id, instruction, 1);
     }
 }

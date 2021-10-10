@@ -21,13 +21,13 @@ public class InstructionService {
         return instructionRepository.findAll();
     }
 
-    public Instruction addInstruction(Instruction instruction) throws InstructionAlreadyExistsException {
+    public Instruction addInstruction(Instruction instruction, int loggedInUserId) throws InstructionAlreadyExistsException {
         final boolean instructionExistWithContent = instructionRepository.instructionExistsByContent(instruction.getContent());
 
         if(instructionExistWithContent){
             throw new InstructionAlreadyExistsException(INSTRUCTION_ALREADY_EXISTS+instruction.getContent());
         }else{
-            int newInstructionId = instructionRepository.addInstruction(instruction);
+            int newInstructionId = instructionRepository.addInstruction(instruction, loggedInUserId);
             instruction.setId(newInstructionId);
         }
 
@@ -62,7 +62,7 @@ public class InstructionService {
         return instructionRepository.deleteByIds(ids);
     }
 
-    public boolean updateInstruction(Integer id, Instruction instruction){
-        return instructionRepository.updateInstruction(id, instruction);
+    public boolean updateInstruction(Integer id, Instruction instruction, int loggedInUserId){
+        return instructionRepository.updateInstruction(id, instruction, loggedInUserId);
     }
 }
