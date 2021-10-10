@@ -21,13 +21,13 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
-    public Subject addSubject(Subject subject) throws SubjectAlreadyExistsException {
+    public Subject addSubject(Subject subject, int loggedInUserId) throws SubjectAlreadyExistsException {
         final boolean subjectExistWithTitle = subjectRepository.subjectExistsByTitle(subject.getTitle());
 
         if(subjectExistWithTitle){
             throw new SubjectAlreadyExistsException(SUBJECT_ALREADY_EXISTS+subject.getTitle());
         }else{
-            int newSubjectId = subjectRepository.addSubject(subject);
+            int newSubjectId = subjectRepository.addSubject(subject, loggedInUserId);
             subject.setId(newSubjectId);
         }
 
@@ -70,7 +70,7 @@ public class SubjectService {
         return subjectRepository.deleteByIds(ids);
     }
 
-    public boolean updateSubject(Integer id, Subject subject){
-        return subjectRepository.updateSubject(id, subject);
+    public boolean updateSubject(Integer id, Subject subject, int loggedInUserId){
+        return subjectRepository.updateSubject(id, subject, loggedInUserId);
     }
 }

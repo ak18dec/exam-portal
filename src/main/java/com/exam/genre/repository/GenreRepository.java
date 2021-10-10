@@ -140,7 +140,7 @@ public class GenreRepository extends BaseRepository {
                 .addValue("description", genre.getDescription())
                 .addValue("enabled", genre.isEnabled())
                 .addValue("id", id)
-                .addValue("loggedInUserId", loggedInUserId);;
+                .addValue("loggedInUserId", loggedInUserId);
         try{
             return npJdbcTemplate.update(sql.toString(), param) > 0;
         }catch (DataAccessException e){

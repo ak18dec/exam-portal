@@ -24,7 +24,7 @@ public class SubjectController {
 
     @PostMapping("/")
     public Subject addSubject(@RequestBody Subject subject) throws SubjectAlreadyExistsException {
-        return subjectService.addSubject(subject);
+        return subjectService.addSubject(subject, 1);
     }
 
     @GetMapping("/{id}")
@@ -39,6 +39,6 @@ public class SubjectController {
 
     @PutMapping("/{id}")
     public boolean updateSubject(@PathVariable("id") Integer id, @RequestBody Subject subject){
-        return subjectService.updateSubject(id, subject);
+        return subjectService.updateSubject(id, subject, 1);
     }
 }
