@@ -21,13 +21,13 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Question addQuestion(Question question) throws QuestionAlreadyExistsException {
+    public Question addQuestion(Question question, int loggedInUserId) throws QuestionAlreadyExistsException {
         final boolean questionExistWithTitle = questionRepository.questionExistsByTitle(question.getTitle());
 
         if(questionExistWithTitle){
             throw new QuestionAlreadyExistsException(QUESTION_ALREADY_EXISTS+question.getTitle());
         }else{
-            int newQuestionId = questionRepository.addQuestion(question);
+            int newQuestionId = questionRepository.addQuestion(question, loggedInUserId);
             question.setId(newQuestionId);
         }
 
@@ -62,7 +62,7 @@ public class QuestionService {
         return questionRepository.deleteByIds(ids);
     }
 
-    public boolean updateQuestion(Integer id, Question question){
-        return questionRepository.updateQuestion(id, question);
+    public boolean updateQuestion(Integer id, Question question, int loggedInUserId){
+        return questionRepository.updateQuestion(id, question, loggedInUserId);
     }
 }

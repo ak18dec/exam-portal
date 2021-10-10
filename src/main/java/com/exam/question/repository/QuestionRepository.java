@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,28 +15,28 @@ import java.util.List;
 @Repository
 public class QuestionRepository extends BaseRepository {
 
-    public static final StringBuilder FIND_SINGLE_QUESTION_QUERY = new StringBuilder("SELECT * FROM question WHERE ");
-    public static final StringBuilder FIND_ALL_QUESTION_QUERY = new StringBuilder("SELECT * FROM question");
-
-    public static final StringBuilder DELETE_SINGLE_QUESTION_QUERY = new StringBuilder("DELETE FROM question WHERE ");
-    public static final StringBuilder DELETE_ALL_QUESTION_QUERY = new StringBuilder("DELETE FROM question");
-    public static final StringBuilder DELETE_LIST_OF_QUESTION_QUERY = new StringBuilder("DELETE FROM question WHERE ");
+    public static final StringBuilder FIND_ALL_QUESTION_QUERY = new StringBuilder("SELECT * FROM questions");
+    public static final StringBuilder DELETE_ALL_QUESTION_QUERY = new StringBuilder("DELETE FROM questions");
 
     //CREATE QUERIES
 
-    public int addQuestion(Question question){
-        final StringBuilder sql = new StringBuilder("INSERT INTO question(title, content, enabled, topic_id");
-        sql.append(" VALUES (:title,:content,:enabled,:topicId");
-        sql.append(")");
+    public int addQuestion(Question question, int loggedInUserId){
+        final StringBuilder sql = new StringBuilder("INSERT INTO questions(title, content, enabled, topic_id, created_by, modified_by)");
+        sql.append(" VALUES (:title,:content,:enabled,:topicId, :createdBy, :modifiedBy");
+        sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", question.getTitle());
         param.addValue("content", question.getContent());
         param.addValue("enabled", question.isEnabled());
         param.addValue("topicId", question.getTopicId());
+        param.addValue("createdBy", loggedInUserId);
+        param.addValue("modifiedBy", loggedInUserId);
 
         try{
-            return npJdbcTemplate.update(sql.toString(), param);
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            npJdbcTemplate.update(sql.toString(), param, generatedKeyHolder);
+            return generatedKeyHolder.getKey().intValue();
         }catch (EmptyResultDataAccessException e){
             return -1;
         }
@@ -45,7 +46,7 @@ public class QuestionRepository extends BaseRepository {
     //SELECT QUERIES
 
     public Question findById(int id){
-        final String sql = FIND_SINGLE_QUESTION_QUERY.append("id=:id").toString();
+        final String sql = "SELECT * FROM questions WHERE id=:id";
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return (Question) npJdbcTemplate.queryForObject(sql, param, new QuestionRowMapper());
@@ -55,7 +56,7 @@ public class QuestionRepository extends BaseRepository {
     }
 
     public Question findByTitle(String title){
-        final String sql = FIND_SINGLE_QUESTION_QUERY.append("title=:title").toString();
+        final String sql = "SELECT * FROM questions WHERE title=:title";
         final SqlParameterSource param = new MapSqlParameterSource("title",title);
         try{
             return (Question) npJdbcTemplate.queryForObject(sql, param, new QuestionRowMapper());
@@ -73,7 +74,7 @@ public class QuestionRepository extends BaseRepository {
     }
 
     public int findTotalCount(){
-        final String sql = "SELECT count(*) from question;";
+        final String sql = "SELECT count(*) from questions;";
         try{
             Integer count = npJdbcTemplate.queryForObject(sql, new MapSqlParameterSource(),Integer.class);
             return count != null ? count : 0 ;
@@ -83,7 +84,7 @@ public class QuestionRepository extends BaseRepository {
     }
 
     public List<Question> findByTopicId(Integer topicId) {
-        final String sql = FIND_SINGLE_QUESTION_QUERY.append("topic_id=:topicId").toString();
+        final String sql = "SELECT * FROM questions WHERE topic_id=:topicId";
         final SqlParameterSource param = new MapSqlParameterSource("topicId",topicId);
         try{
             return npJdbcTemplate.query(sql, param, new QuestionRowMapper());
@@ -93,7 +94,7 @@ public class QuestionRepository extends BaseRepository {
     }
 
     public boolean questionExistsByTitle(String title){
-        final String sql = "SELECT EXISTS(SELECT 1 FROM question where title=:title)";
+        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where title=:title)";
         MapSqlParameterSource param = new MapSqlParameterSource("title", title);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
@@ -105,7 +106,7 @@ public class QuestionRepository extends BaseRepository {
     //DELETE QUERIES
 
     public boolean delete(int id) {
-        final String sql = DELETE_SINGLE_QUESTION_QUERY.append("id=:id").toString();
+        final String sql = "DELETE FROM questions WHERE id=:id";
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -115,7 +116,7 @@ public class QuestionRepository extends BaseRepository {
     }
 
     public boolean deleteByIds(List<Integer> ids){
-        final String sql = DELETE_LIST_OF_QUESTION_QUERY.append("id in (:ids)").toString();
+        final String sql = "DELETE FROM questions WHERE id in (:ids)";
         final SqlParameterSource param = new MapSqlParameterSource().addValue("ids", ids);
         try{
             return npJdbcTemplate.update(sql, param) > 0;
@@ -136,12 +137,13 @@ public class QuestionRepository extends BaseRepository {
 
     //UPDATE QUERIES
 
-    public boolean updateQuestion(int id, Question question){
-        final StringBuilder sql = new StringBuilder("UPDATE question SET ");
+    public boolean updateQuestion(int id, Question question, int loggedInUserId){
+        final StringBuilder sql = new StringBuilder("UPDATE questions SET ");
         sql.append("title=:title,");
         sql.append("content=:content,");
         sql.append("enabled=:enabled,");
         sql.append("topic_id=:topicId ");
+        sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
         MapSqlParameterSource param = new MapSqlParameterSource("id",id)
@@ -149,7 +151,8 @@ public class QuestionRepository extends BaseRepository {
                 .addValue("content", question.getContent())
                 .addValue("enabled", question.isEnabled())
                 .addValue("topicId", question.getTopicId())
-                .addValue("id", id);
+                .addValue("id", id)
+                .addValue("loggedInUserId", loggedInUserId);
         try{
             return npJdbcTemplate.update(sql.toString(), param) > 0;
         }catch (DataAccessException e){

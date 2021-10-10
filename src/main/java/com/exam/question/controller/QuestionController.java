@@ -26,7 +26,7 @@ public class QuestionController {
 
     @PostMapping("/")
     public Question addQuestion(@RequestBody Question question) throws QuestionAlreadyExistsException {
-        return questionService.addQuestion(question);
+        return questionService.addQuestion(question, 1);
     }
 
     @GetMapping("/{id}")
@@ -41,7 +41,7 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public boolean updateQuestion(@RequestBody Question question, @PathVariable("id") Integer id){
-        return questionService.updateQuestion(id, question);
+        return questionService.updateQuestion(id, question, 1);
     }
 
 //    @GetMapping("/{id}/subjects")
