@@ -142,7 +142,7 @@ public class TopicRepository extends BaseRepository {
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");
-        sql.append("category_id=:categoryId ");
+        sql.append("category_id=:categoryId, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 

@@ -142,7 +142,7 @@ public class SubjectRepository extends BaseRepository {
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");
-        sql.append("genre_id=:genreId ");
+        sql.append("genre_id=:genreId, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 

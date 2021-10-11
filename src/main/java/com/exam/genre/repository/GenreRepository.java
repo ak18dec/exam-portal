@@ -131,7 +131,7 @@ public class GenreRepository extends BaseRepository {
         final StringBuilder sql = new StringBuilder("UPDATE genres SET ");
         sql.append("title=:title,");
         sql.append("description=:description,");
-        sql.append("enabled=:enabled ");
+        sql.append("enabled=:enabled, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 

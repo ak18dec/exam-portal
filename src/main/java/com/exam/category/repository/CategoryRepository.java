@@ -142,7 +142,7 @@ public class CategoryRepository extends BaseRepository {
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");
-        sql.append("subject_id=:subjectId ");
+        sql.append("subject_id=:subjectId, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
