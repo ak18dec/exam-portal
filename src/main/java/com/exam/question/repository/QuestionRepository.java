@@ -21,13 +21,13 @@ public class QuestionRepository extends BaseRepository {
     //CREATE QUERIES
 
     public int addQuestion(Question question, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO questions(title, content, enabled, topic_id, created_by, modified_by)");
-        sql.append(" VALUES (:title,:content,:enabled,:topicId, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO questions(title, description, enabled, topic_id, created_by, modified_by)");
+        sql.append(" VALUES (:title,:description,:enabled,:topicId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", question.getTitle());
-        param.addValue("content", question.getContent());
+        param.addValue("description", question.getDescription());
         param.addValue("enabled", question.isEnabled());
         param.addValue("topicId", question.getTopicId());
         param.addValue("createdBy", loggedInUserId);
@@ -140,7 +140,7 @@ public class QuestionRepository extends BaseRepository {
     public boolean updateQuestion(int id, Question question, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("UPDATE questions SET ");
         sql.append("title=:title,");
-        sql.append("content=:content,");
+        sql.append("description=:description,");
         sql.append("enabled=:enabled,");
         sql.append("topic_id=:topicId ");
         sql.append("modified_by=:loggedInUserId ");
@@ -148,7 +148,7 @@ public class QuestionRepository extends BaseRepository {
 
         MapSqlParameterSource param = new MapSqlParameterSource("id",id)
                 .addValue("title", question.getTitle())
-                .addValue("content", question.getContent())
+                .addValue("description", question.getDescription())
                 .addValue("enabled", question.isEnabled())
                 .addValue("topicId", question.getTopicId())
                 .addValue("id", id)

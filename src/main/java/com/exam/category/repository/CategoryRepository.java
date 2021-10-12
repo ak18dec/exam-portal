@@ -138,7 +138,7 @@ public class CategoryRepository extends BaseRepository {
     //UPDATE QUERIES
 
     public boolean updateCategory(int id, Category category, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("UPDATE category SET ");
+        final StringBuilder sql = new StringBuilder("UPDATE categories SET ");
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");

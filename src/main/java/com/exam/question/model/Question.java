@@ -6,7 +6,7 @@ public class Question {
 
     private int id;
     private String title;
-    private String content;
+    private String description;
     private int proficiencyId;
     private boolean enabled;
     private int topicId;
@@ -14,10 +14,10 @@ public class Question {
     public Question() {
     }
 
-    public Question(int id, String title, String content, int proficiencyId, boolean enabled, int topicId) {
+    public Question(int id, String title, String description, int proficiencyId, boolean enabled, int topicId) {
         this.id = id;
         this.title = title;
-        this.content = content;
+        this.description = description;
         this.proficiencyId = proficiencyId;
         this.enabled = enabled;
         this.topicId = topicId;
@@ -37,14 +37,6 @@ public class Question {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public int getProficiencyId() {
@@ -71,12 +63,20 @@ public class Question {
         this.topicId = topicId;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
+                ", description='" + description + '\'' +
                 ", proficiencyId=" + proficiencyId +
                 ", enabled=" + enabled +
                 ", topicId=" + topicId +
