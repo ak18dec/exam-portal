@@ -1,11 +1,8 @@
 package com.exam.question.model;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class Question {
-
-    //Genre -> Subject -> Category -> Topic -> Question
+public class QuestionDataItem {
 
     private int id;
     private String title;
@@ -13,19 +10,19 @@ public class Question {
     private int proficiencyId;
     private boolean enabled;
     private int topicId;
-    private List<QuestionChoice> questionChoices;
+    private QuestionChoice questionChoice;
 
-    public Question() {
+    public QuestionDataItem() {
     }
 
-    public Question(int id, String title, String description, int proficiencyId, boolean enabled, int topicId, List<QuestionChoice> questionChoices) {
+    public QuestionDataItem(int id, String title, String description, int proficiencyId, boolean enabled, int topicId, QuestionChoice questionChoice) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.proficiencyId = proficiencyId;
         this.enabled = enabled;
         this.topicId = topicId;
-        this.questionChoices = questionChoices;
+        this.questionChoice = questionChoice;
     }
 
     public int getId() {
@@ -42,6 +39,14 @@ public class Question {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getProficiencyId() {
@@ -68,32 +73,24 @@ public class Question {
         this.topicId = topicId;
     }
 
-    public String getDescription() {
-        return description;
+    public QuestionChoice getQuestionChoice() {
+        return questionChoice;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<QuestionChoice> getQuestionChoices() {
-        return questionChoices;
-    }
-
-    public void setQuestionChoices(List<QuestionChoice> questionChoices) {
-        this.questionChoices = questionChoices;
+    public void setQuestionChoice(QuestionChoice questionChoice) {
+        this.questionChoice = questionChoice;
     }
 
     @Override
     public String toString() {
-        return "Question{" +
+        return "QuestionDataItem{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", proficiencyId=" + proficiencyId +
                 ", enabled=" + enabled +
                 ", topicId=" + topicId +
-                ", questionChoices=" + questionChoices +
+                ", questionChoice=" + questionChoice +
                 '}';
     }
 }

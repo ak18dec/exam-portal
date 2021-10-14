@@ -3,6 +3,7 @@ package com.exam.question.service;
 import com.exam.question.exception.QuestionAlreadyExistsException;
 import com.exam.question.exception.QuestionNotFoundException;
 import com.exam.question.model.Question;
+import com.exam.question.model.QuestionChoice;
 import com.exam.question.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +65,9 @@ public class QuestionService {
 
     public boolean updateQuestion(Integer id, Question question, int loggedInUserId){
         return questionRepository.updateQuestion(id, question, loggedInUserId);
+    }
+
+    public boolean updateQuestionChoicesByQuestionId(int quesId, List<QuestionChoice> questionChoices, int loggedInUserId) {
+        return questionRepository.updateQuestionChoicesByQuestionId(quesId, questionChoices, loggedInUserId);
     }
 }

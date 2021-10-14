@@ -3,9 +3,8 @@ package com.exam.question.controller;
 import com.exam.question.exception.QuestionAlreadyExistsException;
 import com.exam.question.exception.QuestionNotFoundException;
 import com.exam.question.model.Question;
+import com.exam.question.model.QuestionChoice;
 import com.exam.question.service.QuestionService;
-import com.exam.subject.exception.SubjectNotFoundException;
-import com.exam.subject.model.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,8 +43,8 @@ public class QuestionController {
         return questionService.updateQuestion(id, question, 1);
     }
 
-//    @GetMapping("/{id}/subjects")
-//    public List<Subject> getSubjectByQuestion(@PathVariable("id") Integer id) throws SubjectNotFoundException {
-//        return subjectService.getSubjectsByQuestionId(id);
-//    }
+    @PutMapping("/{id}/choices/")
+    public boolean updateQuestionChoicesByQuestionId(@RequestBody List<QuestionChoice> choices, @PathVariable("id") Integer id){
+        return questionService.updateQuestionChoicesByQuestionId(id, choices, 1);
+    }
 }

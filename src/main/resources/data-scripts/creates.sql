@@ -126,7 +126,7 @@
 
 --ALTER TABLE questions
 --ADD CONSTRAINT fk_ques_prof_id
---FOREIGN KEY (proficiency_id) REFERENCES questions(id);
+--FOREIGN KEY (proficiency_id) REFERENCES proficiency(id);
 
 
 --ALTER TABLE questions
