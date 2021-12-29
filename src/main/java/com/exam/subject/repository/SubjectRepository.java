@@ -21,15 +21,15 @@ public class SubjectRepository extends BaseRepository {
     //CREATE QUERIES
 
     public int addSubject(Subject subject, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO subjects(title, description, enabled, genre_id, created_by, modified_by)");
-        sql.append(" VALUES (:title,:description,:enabled,:genreId, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO subjects(title, description, enabled, created_by, modified_by)");
+        sql.append(" VALUES (:title,:description,:enabled, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", subject.getTitle());
         param.addValue("description", subject.getDescription());
         param.addValue("enabled", subject.isEnabled());
-        param.addValue("genreId", subject.getGenreId());
+//        param.addValue("genreId", subject.getGenreId());
         param.addValue("createdBy", loggedInUserId);
         param.addValue("modifiedBy", loggedInUserId);
 
@@ -83,15 +83,15 @@ public class SubjectRepository extends BaseRepository {
         }
     }
 
-    public List<Subject> findByGenreId(Integer genreId) {
-        final String sql = "SELECT * FROM subjects WHERE genre_id=:genreId";
-        final SqlParameterSource param = new MapSqlParameterSource("genreId",genreId);
-        try{
-            return npJdbcTemplate.query(sql, param, new SubjectRowMapper());
-        }catch (EmptyResultDataAccessException e){
-            return null;
-        }
-    }
+//    public List<Subject> findByGenreId(Integer genreId) {
+//        final String sql = "SELECT * FROM subjects WHERE genre_id=:genreId";
+//        final SqlParameterSource param = new MapSqlParameterSource("genreId",genreId);
+//        try{
+//            return npJdbcTemplate.query(sql, param, new SubjectRowMapper());
+//        }catch (EmptyResultDataAccessException e){
+//            return null;
+//        }
+//    }
 
     public boolean subjectExistsByTitle(String title){
         final String sql = "SELECT EXISTS(SELECT 1 FROM subjects where title=:title)";
@@ -142,7 +142,7 @@ public class SubjectRepository extends BaseRepository {
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");
-        sql.append("genre_id=:genreId, ");
+//        sql.append("genre_id=:genreId, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
@@ -150,7 +150,7 @@ public class SubjectRepository extends BaseRepository {
                 .addValue("title", subject.getTitle())
                 .addValue("description", subject.getDescription())
                 .addValue("enabled", subject.isEnabled())
-                .addValue("genreId", subject.getGenreId())
+//                .addValue("genreId", subject.getGenreId())
                 .addValue("id", id)
                 .addValue("loggedInUserId", loggedInUserId);
         try{

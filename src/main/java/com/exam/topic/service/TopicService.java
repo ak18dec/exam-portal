@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.exam.common.constant.ExceptionConstants.*;
-import static com.exam.common.constant.ExceptionConstants.TOPIC_NOT_FOUND_FOR_CATEGORY_ID;
 
 @Service
 public class TopicService {
@@ -51,10 +50,10 @@ public class TopicService {
         return topic;
     }
 
-    public List<Topic> getTopicsByCategoryId(Integer categoryId) throws TopicNotFoundException {
-        final List<Topic> topics = topicRepository.findByCategoryId(categoryId);
+    public List<Topic> getTopicsBySubjectId(Integer subjectId) throws TopicNotFoundException {
+        final List<Topic> topics = topicRepository.findBySubjectId(subjectId);
         if(topics == null || topics.isEmpty()) {
-            throw new TopicNotFoundException(TOPIC_NOT_FOUND_FOR_CATEGORY_ID+categoryId);
+            throw new TopicNotFoundException(TOPIC_NOT_FOUND_FOR_SUBJECT_ID+subjectId);
         }
         return topics;
     }

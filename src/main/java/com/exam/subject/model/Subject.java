@@ -7,7 +7,7 @@ public class Subject {
     private int id;
     private String title;
     private String description;
-    private int genreId;
+//    private int genreId;
     private boolean enabled;
 
     public Subject() {
@@ -17,7 +17,7 @@ public class Subject {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.genreId = genreId;
+//        this.genreId = genreId;
         this.enabled = enabled;
     }
 
@@ -45,13 +45,13 @@ public class Subject {
         this.description = description;
     }
 
-    public int getGenreId() {
-        return genreId;
-    }
+//    public int getGenreId() {
+//        return genreId;
+//    }
 
-    public void setGenreId(int genreId) {
-        this.genreId = genreId;
-    }
+//    public void setGenreId(int genreId) {
+//        this.genreId = genreId;
+//    }
 
     public boolean isEnabled() {
         return enabled;
@@ -67,7 +67,7 @@ public class Subject {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", genreId=" + genreId +
+//                ", genreId=" + genreId +
                 ", enabled=" + enabled +
                 '}';
     }

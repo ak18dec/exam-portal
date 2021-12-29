@@ -13,7 +13,7 @@ public class SubjectRowMapper implements RowMapper {
         subject.setId(rs.getInt("id"));
         subject.setTitle(rs.getString("title"));
         subject.setDescription(rs.getString("description"));
-        subject.setGenreId(rs.getInt("genre_id"));
+//        subject.setGenreId(rs.getInt("genre_id"));
         subject.setEnabled(rs.getBoolean("enabled"));
         return subject;
     }

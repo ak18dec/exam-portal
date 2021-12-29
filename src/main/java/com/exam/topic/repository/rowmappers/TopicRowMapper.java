@@ -14,7 +14,7 @@ public class TopicRowMapper implements RowMapper {
         topic.setTitle(rs.getString("title"));
         topic.setDescription(rs.getString("description"));
         topic.setEnabled(rs.getBoolean("enabled"));
-        topic.setCategoryId(rs.getInt("category_id"));
+        topic.setSubjectId(rs.getInt("subject_id"));
         return topic;
     }
 }

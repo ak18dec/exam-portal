@@ -1,12 +1,9 @@
 package com.exam.question.model;
 
-import java.util.List;
-
 public class QuestionDataItem {
 
     private int id;
-    private String title;
-    private String description;
+    private String content;
     private int proficiencyId;
     private boolean enabled;
     private int topicId;
@@ -15,10 +12,9 @@ public class QuestionDataItem {
     public QuestionDataItem() {
     }
 
-    public QuestionDataItem(int id, String title, String description, int proficiencyId, boolean enabled, int topicId, QuestionChoice questionChoice) {
+    public QuestionDataItem(int id, String content, int proficiencyId, boolean enabled, int topicId, QuestionChoice questionChoice) {
         this.id = id;
-        this.title = title;
-        this.description = description;
+        this.content = content;
         this.proficiencyId = proficiencyId;
         this.enabled = enabled;
         this.topicId = topicId;
@@ -33,20 +29,12 @@ public class QuestionDataItem {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getContent() {
+        return content;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public int getProficiencyId() {
@@ -85,8 +73,7 @@ public class QuestionDataItem {
     public String toString() {
         return "QuestionDataItem{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", content='" + content + '\'' +
                 ", proficiencyId=" + proficiencyId +
                 ", enabled=" + enabled +
                 ", topicId=" + topicId +

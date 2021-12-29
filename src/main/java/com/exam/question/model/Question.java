@@ -1,6 +1,5 @@
 package com.exam.question.model;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Question {
@@ -8,8 +7,7 @@ public class Question {
     //Genre -> Subject -> Category -> Topic -> Question
 
     private int id;
-    private String title;
-    private String description;
+    private String content;
     private int proficiencyId;
     private boolean enabled;
     private int topicId;
@@ -18,10 +16,9 @@ public class Question {
     public Question() {
     }
 
-    public Question(int id, String title, String description, int proficiencyId, boolean enabled, int topicId, List<QuestionChoice> questionChoices) {
+    public Question(int id, String content, int proficiencyId, boolean enabled, int topicId, List<QuestionChoice> questionChoices) {
         this.id = id;
-        this.title = title;
-        this.description = description;
+        this.content = content;
         this.proficiencyId = proficiencyId;
         this.enabled = enabled;
         this.topicId = topicId;
@@ -34,14 +31,6 @@ public class Question {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public int getProficiencyId() {
@@ -68,12 +57,12 @@ public class Question {
         this.topicId = topicId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public List<QuestionChoice> getQuestionChoices() {
@@ -88,8 +77,7 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", content='" + content + '\'' +
                 ", proficiencyId=" + proficiencyId +
                 ", enabled=" + enabled +
                 ", topicId=" + topicId +

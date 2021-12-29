@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class UserRepository extends BaseRepository {
 
-    public static final StringBuilder FIND_ALL_USERS_QUERY = new StringBuilder("SELECT * FROM users");
+    public static final StringBuilder FIND_ALL_USERS_QUERY = new StringBuilder("SELECT * FROM users order by id");
     public static final StringBuilder DELETE_ALL_USERS_QUERY = new StringBuilder("DELETE FROM users");
 
     //CREATE QUERIES

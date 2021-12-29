@@ -23,10 +23,10 @@ public class QuestionService {
     }
 
     public Question addQuestion(Question question, int loggedInUserId) throws QuestionAlreadyExistsException {
-        final boolean questionExistWithTitle = questionRepository.questionExistsByTitle(question.getTitle());
+        final boolean questionExistWithContent = questionRepository.questionExistsByTitle(question.getContent());
 
-        if(questionExistWithTitle){
-            throw new QuestionAlreadyExistsException(QUESTION_ALREADY_EXISTS+question.getTitle());
+        if(questionExistWithContent){
+            throw new QuestionAlreadyExistsException(QUESTION_ALREADY_EXISTS+question.getContent());
         }else{
             int newQuestionId = questionRepository.addQuestion(question, loggedInUserId);
             question.setId(newQuestionId);

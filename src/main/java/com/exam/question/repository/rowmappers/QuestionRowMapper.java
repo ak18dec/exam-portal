@@ -12,7 +12,7 @@ public class QuestionRowMapper implements RowMapper {
         Question question = new Question();
         question.setId(rs.getInt("id"));
         question.setTitle(rs.getString("title"));
-        question.setDescription(rs.getString("description"));
+        question.setContent(rs.getString("description"));
         question.setEnabled(rs.getBoolean("enabled"));
         question.setProficiencyId(rs.getInt("proficiency_id"));
         question.setTopicId(rs.getInt("topic_id"));

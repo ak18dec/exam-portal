@@ -7,17 +7,17 @@ public class Topic {
     private int id;
     private String title;
     private String description;
-    private int categoryId;
+    private int subjectId;
     private boolean enabled;
 
     public Topic() {
     }
 
-    public Topic(int id, String title, String description, int categoryId, boolean enabled) {
+    public Topic(int id, String title, String description, int subjectId, boolean enabled) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.categoryId = categoryId;
+        this.subjectId = subjectId;
         this.enabled = enabled;
     }
 
@@ -45,14 +45,6 @@ public class Topic {
         this.description = description;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -61,13 +53,21 @@ public class Topic {
         this.enabled = enabled;
     }
 
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
+    }
+
     @Override
     public String toString() {
         return "Topic{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", categoryId=" + categoryId +
+                ", subjectId=" + subjectId +
                 ", enabled=" + enabled +
                 '}';
     }

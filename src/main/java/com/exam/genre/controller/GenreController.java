@@ -48,10 +48,10 @@ public class GenreController {
         return genreService.updateGenre(id, genre, 1);
     }
 
-    @GetMapping("/{id}/subjects")
-    public List<Subject> getSubjectByGenre(@PathVariable("id") Integer id) throws SubjectNotFoundException {
-        return subjectService.getSubjectsByGenreId(id);
-    }
+//    @GetMapping("/{id}/subjects")
+//    public List<Subject> getSubjectByGenre(@PathVariable("id") Integer id) throws SubjectNotFoundException {
+//        return subjectService.getSubjectsByGenreId(id);
+//    }
 
 
 }

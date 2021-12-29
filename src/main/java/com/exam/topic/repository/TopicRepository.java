@@ -21,15 +21,15 @@ public class TopicRepository extends BaseRepository {
     //CREATE QUERIES
 
     public int addTopic(Topic topic, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO topics(title, description, enabled, category_id, created_by, modified_by)");
-        sql.append(" VALUES (:title,:description,:enabled,:categoryId, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO topics(title, description, enabled, subject_id, created_by, modified_by)");
+        sql.append(" VALUES (:title,:description,:enabled,:subjectId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", topic.getTitle());
         param.addValue("description", topic.getDescription());
         param.addValue("enabled", topic.isEnabled());
-        param.addValue("categoryId", topic.getCategoryId());
+        param.addValue("subjectId", topic.getSubjectId());
         param.addValue("createdBy", loggedInUserId);
         param.addValue("modifiedBy", loggedInUserId);
 
@@ -83,9 +83,9 @@ public class TopicRepository extends BaseRepository {
         }
     }
 
-    public List<Topic> findByCategoryId(Integer categoryId) {
-        final String sql = "SELECT * FROM topics WHERE category_id=:categoryId";
-        final SqlParameterSource param = new MapSqlParameterSource("categoryId",categoryId);
+    public List<Topic> findBySubjectId(Integer subjectId) {
+        final String sql = "SELECT * FROM topics WHERE subject_id=:subjectId";
+        final SqlParameterSource param = new MapSqlParameterSource("subjectId",subjectId);
         try{
             return npJdbcTemplate.query(sql, param, new TopicRowMapper());
         }catch (EmptyResultDataAccessException e){
@@ -142,7 +142,7 @@ public class TopicRepository extends BaseRepository {
         sql.append("title=:title,");
         sql.append("description=:description,");
         sql.append("enabled=:enabled,");
-        sql.append("category_id=:categoryId, ");
+        sql.append("subject_id=:subjectId, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
@@ -150,7 +150,7 @@ public class TopicRepository extends BaseRepository {
                 .addValue("title", topic.getTitle())
                 .addValue("description", topic.getDescription())
                 .addValue("enabled", topic.isEnabled())
-                .addValue("categoryId", topic.getCategoryId())
+                .addValue("subjectId", topic.getSubjectId())
                 .addValue("id", id)
                 .addValue("loggedInUserId", loggedInUserId);
         try{

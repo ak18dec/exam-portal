@@ -50,13 +50,13 @@ public class SubjectService {
         return subject;
     }
 
-    public List<Subject> getSubjectsByGenreId(Integer genreId) throws SubjectNotFoundException {
-        final List<Subject> subjects = subjectRepository.findByGenreId(genreId);
-        if(subjects == null || subjects.isEmpty()) {
-            throw new SubjectNotFoundException(SUBJECT_NOT_FOUND_FOR_GENRE_ID+genreId);
-        }
-        return subjects;
-    }
+//    public List<Subject> getSubjectsByGenreId(Integer genreId) throws SubjectNotFoundException {
+//        final List<Subject> subjects = subjectRepository.findByGenreId(genreId);
+//        if(subjects == null || subjects.isEmpty()) {
+//            throw new SubjectNotFoundException(SUBJECT_NOT_FOUND_FOR_GENRE_ID+genreId);
+//        }
+//        return subjects;
+//    }
 
     public boolean removeSubject(Integer subjectId){
         return subjectRepository.delete(subjectId);

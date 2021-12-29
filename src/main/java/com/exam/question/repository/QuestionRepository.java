@@ -29,13 +29,12 @@ public class QuestionRepository extends BaseRepository {
 
     @Transactional
     public int addQuestion(Question question, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO questions(title, description, enabled, proficiency_id, topic_id, created_by, modified_by)");
-        sql.append(" VALUES (:title, :description, :enabled, :proficiencyId, :topicId, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO questions(content, enabled, proficiency_id, topic_id, created_by, modified_by)");
+        sql.append(" VALUES (:title, :content, :enabled, :proficiencyId, :topicId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("title", question.getTitle());
-        param.addValue("description", question.getDescription());
+        param.addValue("content", question.getContent());
         param.addValue("enabled", question.isEnabled());
         param.addValue("proficiencyId", question.getProficiencyId());
         param.addValue("topicId", question.getTopicId());
@@ -65,7 +64,7 @@ public class QuestionRepository extends BaseRepository {
     private int addQuestionChoice(QuestionChoice questionChoice, int loggedInUserId) {
         final StringBuilder sql = new StringBuilder("INSERT INTO exam.question_choices ");
         sql.append("(description, enabled, correct, ques_id, created_by, modified_by)");
-        sql.append("VALUES(:description, :enabled, :correct, :ques_id, :createdBy, :modifiedBy)");
+        sql.append("VALUES(:content, :enabled, :correct, :ques_id, :createdBy, :modifiedBy)");
         sql.append(" RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
@@ -91,7 +90,7 @@ public class QuestionRepository extends BaseRepository {
     public Question findById(int id){
         final StringBuilder sql = new StringBuilder("SELECT q.* , ");
         sql.append("qc.id as qc_id, ");
-        sql.append("qc.description as qc_desc, ");
+        sql.append("qc.content as qc_desc, ");
         sql.append("qc.enabled as qc_enabled, ");
         sql.append("qc.correct as qc_correct ");
         sql.append("FROM questions q ");
@@ -110,7 +109,7 @@ public class QuestionRepository extends BaseRepository {
     public Question findByTitle(String title){
         final StringBuilder sql = new StringBuilder("SELECT q.* , ");
         sql.append("qc.id as qc_id, ");
-        sql.append("qc.description as qc_desc, ");
+        sql.append("qc.content as qc_desc, ");
         sql.append("qc.enabled as qc_enabled, ");
         sql.append("qc.correct as qc_correct ");
         sql.append("FROM questions q ");
@@ -130,7 +129,7 @@ public class QuestionRepository extends BaseRepository {
         try{
             final StringBuilder sql = new StringBuilder("SELECT q.* , ");
             sql.append("qc.id as qc_id, ");
-            sql.append("qc.description as qc_desc, ");
+            sql.append("qc.content as qc_desc, ");
             sql.append("qc.enabled as qc_enabled, ");
             sql.append("qc.correct as qc_correct ");
             sql.append("FROM questions q ");
@@ -150,8 +149,7 @@ public class QuestionRepository extends BaseRepository {
             if(question == null){
                 question = new Question();
                 question.setId(item.getId());
-                question.setTitle(item.getTitle());
-                question.setDescription(item.getDescription());
+                question.setContent(item.getContent());
                 question.setEnabled(item.isEnabled());
                 question.setProficiencyId(item.getProficiencyId());
                 question.setTopicId(item.getTopicId());
@@ -315,7 +313,7 @@ public class QuestionRepository extends BaseRepository {
         if(choicesUpdateStatus) {
             final StringBuilder sql = new StringBuilder("UPDATE questions SET ");
             sql.append("title=:title,");
-            sql.append("description=:description,");
+            sql.append("content=:content,");
             sql.append("enabled=:enabled,");
             sql.append("proficiency_id=:proficiencyId, ");
             sql.append("topic_id=:topicId, ");
@@ -323,8 +321,7 @@ public class QuestionRepository extends BaseRepository {
             sql.append("WHERE id=:id");
 
             MapSqlParameterSource param = new MapSqlParameterSource("id", id)
-                    .addValue("title", question.getTitle())
-                    .addValue("description", question.getDescription())
+                    .addValue("content", question.getContent())
                     .addValue("enabled", question.isEnabled())
                     .addValue("proficiencyId", question.getProficiencyId())
                     .addValue("topicId", question.getTopicId())
