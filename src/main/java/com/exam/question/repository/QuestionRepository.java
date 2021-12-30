@@ -197,9 +197,9 @@ public class QuestionRepository extends BaseRepository {
         }
     }
 
-    public boolean questionExistsByTitle(String title){
-        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where title=:title)";
-        MapSqlParameterSource param = new MapSqlParameterSource("title", title);
+    public boolean questionExistsByContent(String content){
+        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where content=:content)";
+        MapSqlParameterSource param = new MapSqlParameterSource("content", content);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
         }catch (EmptyResultDataAccessException e){
