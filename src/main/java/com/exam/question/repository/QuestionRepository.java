@@ -90,7 +90,7 @@ public class QuestionRepository extends BaseRepository {
     public Question findById(int id){
         final StringBuilder sql = new StringBuilder("SELECT q.* , ");
         sql.append("qc.id as qc_id, ");
-        sql.append("qc.content as qc_desc, ");
+        sql.append("qc.description as qc_desc, ");
         sql.append("qc.enabled as qc_enabled, ");
         sql.append("qc.correct as qc_correct ");
         sql.append("FROM questions q ");
