@@ -23,7 +23,7 @@ public class QuestionService {
     }
 
     public Question addQuestion(Question question, int loggedInUserId) throws QuestionAlreadyExistsException {
-        final boolean questionExistWithContent = questionRepository.questionExistsByTitle(question.getContent());
+        final boolean questionExistWithContent = questionRepository.questionExistsByContent(question.getContent());
 
         if(questionExistWithContent){
             throw new QuestionAlreadyExistsException(QUESTION_ALREADY_EXISTS+question.getContent());

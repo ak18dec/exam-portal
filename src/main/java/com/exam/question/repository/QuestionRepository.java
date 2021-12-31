@@ -30,7 +30,7 @@ public class QuestionRepository extends BaseRepository {
     @Transactional
     public int addQuestion(Question question, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("INSERT INTO questions(content, enabled, proficiency_id, topic_id, created_by, modified_by)");
-        sql.append(" VALUES (:title, :content, :enabled, :proficiencyId, :topicId, :createdBy, :modifiedBy");
+        sql.append(" VALUES (:content, :enabled, :proficiencyId, :topicId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
@@ -64,7 +64,7 @@ public class QuestionRepository extends BaseRepository {
     private int addQuestionChoice(QuestionChoice questionChoice, int loggedInUserId) {
         final StringBuilder sql = new StringBuilder("INSERT INTO exam.question_choices ");
         sql.append("(description, enabled, correct, ques_id, created_by, modified_by)");
-        sql.append("VALUES(:content, :enabled, :correct, :ques_id, :createdBy, :modifiedBy)");
+        sql.append("VALUES(:description, :enabled, :correct, :ques_id, :createdBy, :modifiedBy)");
         sql.append(" RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
@@ -197,9 +197,9 @@ public class QuestionRepository extends BaseRepository {
         }
     }
 
-    public boolean questionExistsByTitle(String title){
-        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where title=:title)";
-        MapSqlParameterSource param = new MapSqlParameterSource("title", title);
+    public boolean questionExistsByContent(String content){
+        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where content=:content)";
+        MapSqlParameterSource param = new MapSqlParameterSource("content", content);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
         }catch (EmptyResultDataAccessException e){
@@ -312,7 +312,6 @@ public class QuestionRepository extends BaseRepository {
 
         if(choicesUpdateStatus) {
             final StringBuilder sql = new StringBuilder("UPDATE questions SET ");
-            sql.append("title=:title,");
             sql.append("content=:content,");
             sql.append("enabled=:enabled,");
             sql.append("proficiency_id=:proficiencyId, ");
