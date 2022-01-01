@@ -128,7 +128,7 @@ public class InstructionRepository extends BaseRepository {
     public boolean updateInstruction(int id, Instruction instruction, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("UPDATE instructions SET ");
         sql.append("content=:content,");
-        sql.append("enabled=:enabled ");
+        sql.append("enabled=:enabled, ");
         sql.append("modified_by=:loggedInUserId ");
         sql.append("WHERE id=:id");
 
