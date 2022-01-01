@@ -150,3 +150,12 @@
 --ADD CONSTRAINT fk_choice_ques_id
 --FOREIGN KEY (ques_id) REFERENCES questions(id);
 
+--CREATE TABLE instructions (
+--    id serial primary key,
+--    content varchar(255),
+--    enabled boolean,
+--	created_by int not null,
+--	created_on timestamp default current_timestamp,
+--	modified_by int not null,
+--	modified_on timestamp default current_timestamp
+--)
