@@ -15,6 +15,10 @@ public class Quiz {
     private int maxTime;
     private boolean published;
 
+    public Quiz() {
+
+    }
+
     public Quiz(int id, String title, String description, List<Integer> questionIds, int proficiencyId, boolean instructionEnabled,
                 List<Integer> instructionIds, int maxMarks, int maxTime, boolean published) {
         this.id = id;

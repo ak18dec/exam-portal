@@ -159,3 +159,38 @@
 --	modified_by int not null,
 --	modified_on timestamp default current_timestamp
 --)
+
+--CREATE TABLE quiz (
+--    id serial primary key,
+--    title varchar(100) not null,
+--    description varchar(255),
+--    published boolean,
+--    proficiency_id int not null,
+--    max_marks int not null,
+--    max_time int not null,
+--    instruction_enabled boolean,
+--  	created_by int not null,
+--  	created_on timestamp default current_timestamp,
+--  	modified_by int not null,
+--  	modified_on timestamp default current_timestamp
+--)
+
+--create table quiz_ques (
+--	id serial primary key,
+--	quiz_id int not null,
+--	question_id int not null
+--)
+--ALTER TABLE quiz_ques
+--ADD CONSTRAINT fk_ques_quiz_id
+--FOREIGN KEY (quiz_id) REFERENCES quiz(id);
+
+
+--create table quiz_instruction (
+--	id serial primary key,
+--	quiz_id int not null,
+--	instruction_id int not null
+--)
+--ALTER TABLE quiz_instruction
+--ADD CONSTRAINT fk_instr_quiz_id
+--FOREIGN KEY (quiz_id) REFERENCES quiz(id);
+
