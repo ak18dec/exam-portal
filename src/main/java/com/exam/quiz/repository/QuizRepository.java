@@ -59,6 +59,7 @@ public class QuizRepository extends BaseRepository {
     }
 
     private int[] addQuizQuestions(List<Integer> questionIds, int loggedInUserId, int quizId){
+        System.out.println("Adding New Questions to Quiz ID: "+quizId);
         final String sql = "INSERT INTO quiz_ques(quiz_id, question_id) VALUES (:quizId, :questionId)";
         List<MapSqlParameterSource> params = new ArrayList<>();
         for (Integer quesId : questionIds) {
@@ -90,12 +91,21 @@ public class QuizRepository extends BaseRepository {
 
         System.out.println("Quiz fetched for id: "+id);
         System.out.println(quizOldData.toString());
+        System.out.println("Updated Quiz Data: ");
+        System.out.println(quiz.toString());
 
         List<Integer> oldQuestions = quizOldData.getQuestionIds();
         List<Integer> newQuestions = quiz.getQuestionIds();
 
+        System.out.println("Old Question IDs: "+oldQuestions.toString());
+        System.out.println("New Question IDs: "+newQuestions.toString());
+
         List<Integer> oldInstructions = quizOldData.getInstructionIds();
         List<Integer> newInstructions = quiz.getInstructionIds();
+
+        System.out.println("Old Instructions IDs: "+oldInstructions.toString());
+        System.out.println("New Instructions IDs: "+newInstructions.toString());
+
 
         boolean questionsModified = true;
         if(oldQuestions != null && !oldQuestions.isEmpty()){
@@ -161,9 +171,12 @@ public class QuizRepository extends BaseRepository {
 
     @Transactional
     public boolean updateQuizQuestions(int id, List<Integer> questionIds, int loggedInUserId){
+        System.out.println("----------Updating Quiz Questions-----------");
         boolean deleteOldQuestions = deleteQuestions(id);
+        System.out.println("deleteOldQuestions: "+deleteOldQuestions);
         if(deleteOldQuestions){
             int[] updatedQuesIds = addQuizQuestions(questionIds, loggedInUserId, id);
+            System.out.println("New Added Questions: "+updatedQuesIds.toString());
             return updatedQuesIds.length > 0;
         }
         return false;

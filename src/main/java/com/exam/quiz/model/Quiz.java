@@ -119,10 +119,10 @@ public class Quiz {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", questionIds=" + questionIds +
+                ", questionIds=" + questionIds.toString() +
                 ", proficiencyId=" + proficiencyId +
                 ", instructionEnabled=" + instructionEnabled +
-                ", instructionIds=" + instructionIds +
+                ", instructionIds=" + instructionIds.toString() +
                 ", maxMarks=" + maxMarks +
                 ", maxTime=" + maxTime +
                 ", published=" + published +
