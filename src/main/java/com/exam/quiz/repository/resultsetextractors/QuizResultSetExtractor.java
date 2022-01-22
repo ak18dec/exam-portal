@@ -38,16 +38,22 @@ public class QuizResultSetExtractor implements ResultSetExtractor<List<Quiz>> {
                 questionIds = new ArrayList<>();
                 quiz.setQuestionIds(questionIds);
             }
-            questionIds.add(rs.getInt("ques_id"));
+            int quesId = rs.getInt("ques_id");
+            if(quesId > 0) {
+                questionIds.add(quesId);
+            }
 
             List<Integer> instructionsIds = quiz.getInstructionIds();
             if(instructionsIds == null){
                 instructionsIds = new ArrayList<>();
                 quiz.setInstructionIds(instructionsIds);
             }
-            instructionsIds.add(rs.getInt("instruction_id"));
+            int instructionId = rs.getInt("instruction_id");
+            if(instructionId > 0) {
+                instructionsIds.add(instructionId);
+            }
         }
 
-        return new ArrayList<Quiz>(quizMap.values());
+        return new ArrayList<>(quizMap.values());
     }
 }
