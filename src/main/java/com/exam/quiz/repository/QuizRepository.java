@@ -88,6 +88,9 @@ public class QuizRepository extends BaseRepository {
     public boolean updateQuiz(int id, Quiz quiz, int loggedInUserId){
         Quiz quizOldData = findQuizById(id);
 
+        System.out.println("Quiz fetched for id: "+id);
+        System.out.println(quizOldData.toString());
+
         List<Integer> oldQuestions = quizOldData.getQuestionIds();
         List<Integer> newQuestions = quiz.getQuestionIds();
 
@@ -99,13 +102,20 @@ public class QuizRepository extends BaseRepository {
             questionsModified = !oldQuestions.equals(newQuestions);
         }
 
+        System.out.println("questionsModified: "+questionsModified);
+
         boolean updatedQuestionsStatus = true;
         if(questionsModified){
             updatedQuestionsStatus = updateQuizQuestions(id, newQuestions, loggedInUserId);
+
         }
+
+        System.out.println("updatedQuestionsStatus: " +updatedQuestionsStatus);
 
         boolean instructionsModified = true;
         boolean updateInstructionsStatus= true;
+
+        System.out.println("quiz.isInstructionEnabled(): "+quiz.isInstructionEnabled());
 
         if(!quiz.isInstructionEnabled()){
             updateInstructionsStatus = deleteInstructions(id);
@@ -117,6 +127,8 @@ public class QuizRepository extends BaseRepository {
                 updateInstructionsStatus = updateInstructions(id, newInstructions, loggedInUserId);
             }
         }
+
+        System.out.println("updateInstructionsStatus: "+updateInstructionsStatus);
 
         if(updatedQuestionsStatus && updateInstructionsStatus) {
             final StringBuilder sql = new StringBuilder("UPDATE quiz SET ");
@@ -266,7 +278,7 @@ public class QuizRepository extends BaseRepository {
             final SqlParameterSource param = new MapSqlParameterSource("id",id);
 
             List<Quiz> quizzes = npJdbcTemplate.query(sql.toString(), param,new QuizResultSetExtractor());
-            return quizzes != null ? quizzes.get(0) : null;
+            return quizzes != null && !quizzes.isEmpty() ? quizzes.get(0) : null;
 
         }catch (DataAccessException e){
             return null;
