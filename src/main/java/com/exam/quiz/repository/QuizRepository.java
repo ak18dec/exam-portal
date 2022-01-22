@@ -206,12 +206,15 @@ public class QuizRepository extends BaseRepository {
 
     public List<Quiz> findAll() {
         try{
-            final StringBuilder sql = new StringBuilder("SELECT quiz.* , ");
-            sql.append("qq.question_id as ques_id, ");
-            sql.append("qi.instruction_id as instruction_id ");
-            sql.append("FROM quiz as quiz ");
-            sql.append("LEFT JOIN quiz_ques qq on qq.quiz_id = quiz.id ");
-            sql.append("LEFT JOIN quiz_instruction qi on qi.quiz_id = quiz.id");
+            final StringBuilder sql = new StringBuilder();
+            sql.append("select q.* from ( ");
+            sql.append("SELECT quiz.* ,'question' QUES_OR_INSTRUCTION , qq.question_id as mapping_id ");
+            sql.append("FROM quiz as quiz LEFT JOIN quiz_ques qq on qq.quiz_id = quiz.id ");
+            sql.append("UNION ");
+            sql.append("SELECT quiz.* , 'instruction' QUES_OR_INSTRUCTION, qi.instruction_id as mapping_id ");
+            sql.append("from quiz as quiz LEFT JOIN quiz_instruction qi on qi.quiz_id = quiz.id ");
+            sql.append(" ) as q ");
+            sql.append("order by q.id, q.QUES_OR_INSTRUCTION ");
 
             return npJdbcTemplate.query(sql.toString(), new QuizResultSetExtractor());
 
@@ -222,13 +225,16 @@ public class QuizRepository extends BaseRepository {
 
     public Quiz findQuizById(int id) {
         try{
-            final StringBuilder sql = new StringBuilder("SELECT quiz.* , ");
-            sql.append("qq.question_id as ques_id, ");
-            sql.append("qi.instruction_id as instruction_id ");
-            sql.append("FROM quiz as quiz ");
-            sql.append("LEFT JOIN quiz_ques qq on qq.quiz_id = quiz.id ");
-            sql.append("LEFT JOIN quiz_instruction qi on qi.quiz_id = quiz.id ");
-            sql.append("WHERE quiz.id=:id");
+            final StringBuilder sql = new StringBuilder();
+            sql.append("select q.* from ( ");
+            sql.append("SELECT quiz.* ,'question' QUES_OR_INSTRUCTION , qq.question_id as mapping_id ");
+            sql.append("FROM quiz as quiz LEFT JOIN quiz_ques qq on qq.quiz_id = quiz.id WHERE quiz.id=:id ");
+            sql.append("UNION ");
+            sql.append("SELECT quiz.* , 'instruction' QUES_OR_INSTRUCTION, qi.instruction_id as mapping_id ");
+            sql.append("from quiz as quiz LEFT JOIN quiz_instruction qi on qi.quiz_id = quiz.id WHERE quiz.id=:id ");
+            sql.append(" ) as q ");
+            sql.append("order by q.id, q.QUES_OR_INSTRUCTION ");
+
             final SqlParameterSource param = new MapSqlParameterSource("id",id);
 
             List<Quiz> quizzes = npJdbcTemplate.query(sql.toString(), param,new QuizResultSetExtractor());
