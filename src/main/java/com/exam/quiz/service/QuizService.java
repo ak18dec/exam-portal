@@ -67,7 +67,7 @@ public class QuizService {
                 quizRepository.updateInstructions(quizId, newInstructions, 1);
             }
         }else{
-            int[] newInstrIds = addQuizInstructions(newInstructions, 1, quizId);
+            int[] newInstrIds = addQuizInstructions(newInstructions, quizId, 1);
         }
 
         return quizRepository.updateQuiz(quizId, quiz, 1);
