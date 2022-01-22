@@ -58,7 +58,7 @@ public class QuizRepository extends BaseRepository {
         }
     }
 
-    private int[] addQuizQuestions(List<Integer> questionIds, int loggedInUserId, int quizId){
+    public int[] addQuizQuestions(List<Integer> questionIds, int loggedInUserId, int quizId){
         System.out.println("Adding New Questions to Quiz ID: "+quizId);
         final String sql = "INSERT INTO quiz_ques(quiz_id, question_id) VALUES (:quizId, :questionId)";
         List<MapSqlParameterSource> params = new ArrayList<>();
@@ -71,7 +71,7 @@ public class QuizRepository extends BaseRepository {
         return npJdbcTemplate.batchUpdate(sql, params.toArray(new MapSqlParameterSource[0]));
     }
 
-    private int[] addQuizInstructions(List<Integer> instructionIds, int loggedInUserId, int quizId){
+    public int[] addQuizInstructions(List<Integer> instructionIds, int loggedInUserId, int quizId){
         final String sql = "INSERT INTO quiz_instruction(quiz_id, instruction_id) VALUES (:quizId, :instructionId)";
         List<MapSqlParameterSource> params = new ArrayList<>();
         for(Integer instr : instructionIds){
@@ -87,96 +87,29 @@ public class QuizRepository extends BaseRepository {
 
     @Transactional
     public boolean updateQuiz(int id, Quiz quiz, int loggedInUserId){
-        Quiz quizOldData = findQuizById(id);
+        final StringBuilder sql = new StringBuilder("UPDATE quiz SET ");
+        sql.append("title=:title,");
+        sql.append("description=:description,");
+        sql.append("published=:published");
+        sql.append("proficiency_id=:proficiencyId, ");
+        sql.append("max_marks=:maxMarks, ");
+        sql.append("max_time=:maxTime, ");
+        sql.append("modified_by=:loggedInUserId ");
+        sql.append("WHERE id=:id");
 
-        System.out.println("Quiz fetched for id: "+id);
-        System.out.println(quizOldData.toString());
-        System.out.println("Updated Quiz Data: ");
-        System.out.println(quiz.toString());
-
-        List<Integer> oldQuestions = quizOldData.getQuestionIds();
-        List<Integer> newQuestions = quiz.getQuestionIds();
-
-        System.out.println("Old Question IDs: "+oldQuestions.toString());
-        System.out.println("New Question IDs: "+newQuestions.toString());
-
-        List<Integer> oldInstructions = quizOldData.getInstructionIds();
-        List<Integer> newInstructions = quiz.getInstructionIds();
-
-        System.out.println("Old Instructions IDs: "+oldInstructions.toString());
-        System.out.println("New Instructions IDs: "+newInstructions.toString());
-
-
-        boolean questionsModified = true;
-        if(oldQuestions != null && !oldQuestions.isEmpty()){
-            questionsModified = !oldQuestions.equals(newQuestions);
+        MapSqlParameterSource param = new MapSqlParameterSource("id", id)
+                .addValue("title", quiz.getTitle())
+                .addValue("description", quiz.getDescription())
+                .addValue("published", quiz.isPublished())
+                .addValue("proficiencyId", quiz.getProficiencyId())
+                .addValue("maxMarks", quiz.getMaxMarks())
+                .addValue("maxTime", quiz.getMaxTime())
+                .addValue("loggedInUserId", loggedInUserId);
+        try {
+            return npJdbcTemplate.update(sql.toString(), param) > 0;
+        } catch (DataAccessException e) {
+            return false;
         }
-
-        System.out.println("questionsModified: "+questionsModified);
-
-        boolean updatedQuestionsStatus = true;
-        if(questionsModified){
-            if(oldQuestions == null || oldQuestions.isEmpty()){
-                int[] newQuesIds = addQuizQuestions(newQuestions, loggedInUserId, id);
-                updatedQuestionsStatus = newQuesIds.length > 0;
-            }else {
-                updatedQuestionsStatus = updateQuizQuestions(id, newQuestions, loggedInUserId);
-            }
-
-        }
-
-        System.out.println("updatedQuestionsStatus: " +updatedQuestionsStatus);
-
-        boolean instructionsModified = true;
-        boolean updateInstructionsStatus= true;
-
-        System.out.println("quiz.isInstructionEnabled(): "+quiz.isInstructionEnabled());
-
-        if(!quiz.isInstructionEnabled() && oldInstructions != null && !oldInstructions.isEmpty()){
-            updateInstructionsStatus = deleteInstructions(id);
-        }else if(quiz.isInstructionEnabled()){
-            if(oldInstructions != null && !oldInstructions.isEmpty()){
-                instructionsModified = !oldInstructions.equals(newInstructions);
-            }
-            if(instructionsModified){
-                if(oldInstructions == null || oldInstructions.isEmpty()){
-                    int[] newInstIds = addQuizInstructions(newInstructions, loggedInUserId, id);
-                    updateInstructionsStatus = newInstIds.length > 0;
-                }else {
-                    updateInstructionsStatus = updateInstructions(id, newInstructions, loggedInUserId);
-                }
-            }
-        }
-
-        System.out.println("updateInstructionsStatus: "+updateInstructionsStatus);
-
-        if(updatedQuestionsStatus && updateInstructionsStatus) {
-            final StringBuilder sql = new StringBuilder("UPDATE quiz SET ");
-            sql.append("title=:title,");
-            sql.append("description=:description,");
-            sql.append("published=:published");
-            sql.append("proficiency_id=:proficiencyId, ");
-            sql.append("max_marks=:maxMarks, ");
-            sql.append("max_time=:maxTime, ");
-            sql.append("modified_by=:loggedInUserId ");
-            sql.append("WHERE id=:id");
-
-            MapSqlParameterSource param = new MapSqlParameterSource("id", id)
-                    .addValue("title", quiz.getTitle())
-                    .addValue("description", quiz.getDescription())
-                    .addValue("published", quiz.isPublished())
-                    .addValue("proficiencyId", quiz.getProficiencyId())
-                    .addValue("maxMarks", quiz.getMaxMarks())
-                    .addValue("maxTime", quiz.getMaxTime())
-                    .addValue("loggedInUserId", loggedInUserId);
-            try {
-                return npJdbcTemplate.update(sql.toString(), param) > 0;
-            } catch (DataAccessException e) {
-                return false;
-            }
-        }
-
-        return false;
     }
 
     @Transactional
@@ -215,8 +148,6 @@ public class QuizRepository extends BaseRepository {
         }
         return false;
     }
-
-
 
     @Transactional
     public boolean toggleInstructions(int id, boolean instructionEnable, List<Integer> instructionIds){

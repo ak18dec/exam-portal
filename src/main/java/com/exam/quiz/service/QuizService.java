@@ -38,7 +38,47 @@ public class QuizService {
     }
 
     public boolean updateQuiz(Quiz quiz, Integer quizId){
+
+        Quiz quizOldData = quizRepository.findQuizById(quizId);
+
+        System.out.println("Quiz fetched for id: "+quizId);
+        System.out.println(quizOldData.toString());
+        System.out.println("Quiz new data: ");
+        System.out.println(quiz.toString());
+
+        List<Integer> oldQuestions = quizOldData.getQuestionIds();
+        List<Integer> newQuestions = quiz.getQuestionIds();
+
+        List<Integer> oldInstructions = quizOldData.getInstructionIds();
+        List<Integer> newInstructions = quiz.getInstructionIds();
+
+        if(oldQuestions != null && !oldQuestions.isEmpty()){
+            boolean sameQuestions = oldQuestions.equals(newQuestions);
+            if(!sameQuestions){
+                quizRepository.updateQuizQuestions(quizId, newQuestions, 1);
+            }
+        }else {
+            int[] newQuesIds = addQuizQuestions(newQuestions, quizId, 1);
+        }
+
+        if(oldInstructions != null && !oldInstructions.isEmpty()){
+            boolean sameInstructions = oldInstructions.equals(newInstructions);
+            if(!sameInstructions){
+                quizRepository.updateInstructions(quizId, newInstructions, 1);
+            }
+        }else{
+            int[] newInstrIds = addQuizInstructions(newInstructions, 1, quizId);
+        }
+
         return quizRepository.updateQuiz(quizId, quiz, 1);
+    }
+
+    public int[] addQuizQuestions(List<Integer> quesIds, int quizId, int loggedInUserId) {
+        return quizRepository.addQuizQuestions(quesIds, loggedInUserId, quizId);
+    }
+
+    public int[] addQuizInstructions(List<Integer> instructionIds, int quizId, int loggedInUserId) {
+        return quizRepository.addQuizInstructions(instructionIds, loggedInUserId, quizId);
     }
 
 }
