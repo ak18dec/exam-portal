@@ -88,14 +88,14 @@ public class QuizRepository extends BaseRepository {
     @Transactional
     public boolean updateQuiz(int id, Quiz quiz, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("UPDATE quiz SET ");
-        sql.append("title=:title,");
-        sql.append("description=:description,");
-        sql.append("published=:published");
+        sql.append("title=:title, ");
+        sql.append("description=:description, ");
+        sql.append("published=:published, ");
         sql.append("proficiency_id=:proficiencyId, ");
         sql.append("max_marks=:maxMarks, ");
         sql.append("max_time=:maxTime, ");
         sql.append("modified_by=:loggedInUserId ");
-        sql.append("WHERE id=:id");
+        sql.append("WHERE id=:id ");
 
         MapSqlParameterSource param = new MapSqlParameterSource("id", id)
                 .addValue("title", quiz.getTitle())
