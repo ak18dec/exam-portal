@@ -11,12 +11,12 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class QuizRepository extends BaseRepository {
-    
+
     //CREATE QUERIES
 
     @Transactional
@@ -86,11 +86,74 @@ public class QuizRepository extends BaseRepository {
 
     @Transactional
     public boolean updateQuiz(int id, Quiz quiz, int loggedInUserId){
+        Quiz quizOldData = findQuizById(id);
+
+        List<Integer> oldQuestions = quizOldData.getQuestionIds();
+        List<Integer> newQuestions = quiz.getQuestionIds();
+
+        List<Integer> oldInstructions = quizOldData.getInstructionIds();
+        List<Integer> newInstructions = quiz.getInstructionIds();
+
+        boolean questionsModified = true;
+        if(oldQuestions != null && !oldQuestions.isEmpty()){
+            questionsModified = !oldQuestions.equals(newQuestions);
+        }
+
+        boolean updatedQuestionsStatus = true;
+        if(questionsModified){
+            updatedQuestionsStatus = updateQuizQuestions(id, newQuestions, loggedInUserId);
+        }
+
+        boolean instructionsModified = true;
+        boolean updateInstructionsStatus= true;
+
+        if(!quiz.isInstructionEnabled()){
+            updateInstructionsStatus = deleteInstructions(id);
+        }else{
+            if(oldInstructions != null && !oldInstructions.isEmpty()){
+                instructionsModified = !oldInstructions.equals(newInstructions);
+            }
+            if(instructionsModified){
+                updateInstructionsStatus = updateInstructions(id, newInstructions, loggedInUserId);
+            }
+        }
+
+        if(updatedQuestionsStatus && updateInstructionsStatus) {
+            final StringBuilder sql = new StringBuilder("UPDATE quiz SET ");
+            sql.append("title=:title,");
+            sql.append("description=:description,");
+            sql.append("published=:published");
+            sql.append("proficiency_id=:proficiencyId, ");
+            sql.append("max_marks=:maxMarks, ");
+            sql.append("max_time=:maxTime, ");
+            sql.append("modified_by=:loggedInUserId ");
+            sql.append("WHERE id=:id");
+
+            MapSqlParameterSource param = new MapSqlParameterSource("id", id)
+                    .addValue("title", quiz.getTitle())
+                    .addValue("description", quiz.getDescription())
+                    .addValue("published", quiz.isPublished())
+                    .addValue("proficiencyId", quiz.getProficiencyId())
+                    .addValue("maxMarks", quiz.getMaxMarks())
+                    .addValue("maxTime", quiz.getMaxTime())
+                    .addValue("loggedInUserId", loggedInUserId);
+            try {
+                return npJdbcTemplate.update(sql.toString(), param) > 0;
+            } catch (DataAccessException e) {
+                return false;
+            }
+        }
+
         return false;
     }
 
     @Transactional
     public boolean updateQuizQuestions(int id, List<Integer> questionIds, int loggedInUserId){
+        boolean deleteOldQuestions = deleteQuestions(id);
+        if(deleteOldQuestions){
+            int[] updatedQuesIds = addQuizQuestions(questionIds, loggedInUserId, id);
+            return updatedQuesIds.length > 0;
+        }
         return false;
     }
 
@@ -110,8 +173,15 @@ public class QuizRepository extends BaseRepository {
 
     @Transactional
     public boolean updateInstructions(int id, List<Integer> instructionsIds, int loggedInUserId){
+        boolean deleteOldInstructions = deleteInstructions(id);
+        if(deleteOldInstructions){
+            int[] updatedInstructionIds = addQuizInstructions(instructionsIds, loggedInUserId, id);
+            return updatedInstructionIds.length > 0;
+        }
         return false;
     }
+
+
 
     @Transactional
     public boolean toggleInstructions(int id, boolean instructionEnable, List<Integer> instructionIds){
@@ -141,10 +211,29 @@ public class QuizRepository extends BaseRepository {
         }
     }
 
+    private boolean deleteQuestions(int quizId){
+        final String sql = "DELETE FROM quiz_ques WHERE quiz_id=:quizId";
+        final MapSqlParameterSource param = new MapSqlParameterSource("quizId", quizId);
+        try {
+            return npJdbcTemplate.update(sql, param) > 0;
+        } catch (DataAccessException e) {
+            return false;
+        }
+    }
+
     //DELETE QUERIES
 
     public boolean delete(int id){
-        return false;
+        boolean questionsDeleted = deleteQuestions(id);
+        boolean instructionsDeleted = deleteInstructions(id);
+        final String sql = "DELETE FROM quiz WHERE id=:id";
+        final MapSqlParameterSource param = new MapSqlParameterSource("id", id);
+        try{
+            boolean quizDeleted = npJdbcTemplate.update(sql, param) > 0;
+            return quizDeleted && questionsDeleted && instructionsDeleted;
+        }catch (DataAccessException e){
+            return false;
+        }
     }
 
     //SELECT QUERIES
@@ -177,7 +266,7 @@ public class QuizRepository extends BaseRepository {
             final SqlParameterSource param = new MapSqlParameterSource("id",id);
 
             List<Quiz> quizzes = npJdbcTemplate.query(sql.toString(), param,new QuizResultSetExtractor());
-            return quizzes.get(0);
+            return quizzes != null ? quizzes.get(0) : null;
 
         }catch (DataAccessException e){
             return null;
