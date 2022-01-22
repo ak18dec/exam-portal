@@ -116,7 +116,12 @@ public class QuizRepository extends BaseRepository {
 
         boolean updatedQuestionsStatus = true;
         if(questionsModified){
-            updatedQuestionsStatus = updateQuizQuestions(id, newQuestions, loggedInUserId);
+            if(oldQuestions == null || oldQuestions.isEmpty()){
+                int[] newQuesIds = addQuizQuestions(newQuestions, loggedInUserId, id);
+                updatedQuestionsStatus = newQuesIds.length > 0;
+            }else {
+                updatedQuestionsStatus = updateQuizQuestions(id, newQuestions, loggedInUserId);
+            }
 
         }
 
@@ -127,14 +132,19 @@ public class QuizRepository extends BaseRepository {
 
         System.out.println("quiz.isInstructionEnabled(): "+quiz.isInstructionEnabled());
 
-        if(!quiz.isInstructionEnabled()){
+        if(!quiz.isInstructionEnabled() && oldInstructions != null && !oldInstructions.isEmpty()){
             updateInstructionsStatus = deleteInstructions(id);
-        }else{
+        }else if(quiz.isInstructionEnabled()){
             if(oldInstructions != null && !oldInstructions.isEmpty()){
                 instructionsModified = !oldInstructions.equals(newInstructions);
             }
             if(instructionsModified){
-                updateInstructionsStatus = updateInstructions(id, newInstructions, loggedInUserId);
+                if(oldInstructions == null || oldInstructions.isEmpty()){
+                    int[] newInstIds = addQuizInstructions(newInstructions, loggedInUserId, id);
+                    updateInstructionsStatus = newInstIds.length > 0;
+                }else {
+                    updateInstructionsStatus = updateInstructions(id, newInstructions, loggedInUserId);
+                }
             }
         }
 
