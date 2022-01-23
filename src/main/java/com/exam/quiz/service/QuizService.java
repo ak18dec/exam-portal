@@ -1,5 +1,6 @@
 package com.exam.quiz.service;
 
+import com.exam.question.model.Question;
 import com.exam.quiz.exception.QuizNotFoundException;
 import com.exam.quiz.model.Quiz;
 import com.exam.quiz.repository.QuizRepository;
@@ -79,6 +80,11 @@ public class QuizService {
 
     public int[] addQuizInstructions(List<Integer> instructionIds, int quizId, int loggedInUserId) {
         return quizRepository.addQuizInstructions(instructionIds, loggedInUserId, quizId);
+    }
+
+    public List<Question> getQuestionsByQuizId(Integer quizId) {
+        final List<Question> questions = quizRepository.findQuestionsByQuizId(quizId);
+        return questions;
     }
 
 }

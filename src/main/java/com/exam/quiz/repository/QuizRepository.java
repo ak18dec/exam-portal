@@ -1,7 +1,9 @@
 package com.exam.quiz.repository;
 
 import com.exam.common.repository.BaseRepository;
+import com.exam.question.model.Question;
 import com.exam.quiz.model.Quiz;
+import com.exam.quiz.repository.resultsetextractors.QuizQuestionResultSetExtractor;
 import com.exam.quiz.repository.resultsetextractors.QuizResultSetExtractor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -237,9 +239,28 @@ public class QuizRepository extends BaseRepository {
 
             final SqlParameterSource param = new MapSqlParameterSource("id",id);
 
-            List<Quiz> quizzes = npJdbcTemplate.query(sql.toString(), param,new QuizResultSetExtractor());
+            List<Quiz> quizzes = npJdbcTemplate.query(sql.toString(), param, new QuizResultSetExtractor());
             return quizzes != null && !quizzes.isEmpty() ? quizzes.get(0) : null;
 
+        }catch (DataAccessException e){
+            return null;
+        }
+    }
+
+    public List<Question> findQuestionsByQuizId(int id) {
+        try {
+            final StringBuilder sql = new StringBuilder();
+            sql.append("SELECT q.id as quesId, q.content as quesContent, ");
+            sql.append("qc.id as choiceId, qc.description as choice,qc.correct as correctChoice ");
+            sql.append("FROM questions q ");
+            sql.append("JOIN quiz_ques qq on qq.question_id = q.id ");
+            sql.append("JOIN question_choices qc on qc.ques_id = q.id ");
+            sql.append("WHERE qq.quiz_id = :id ");
+            sql.append("ORDER BY quesId ");
+
+            final SqlParameterSource param = new MapSqlParameterSource("id",id);
+
+            return npJdbcTemplate.query(sql.toString(), param, new QuizQuestionResultSetExtractor());
         }catch (DataAccessException e){
             return null;
         }

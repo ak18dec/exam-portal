@@ -1,5 +1,6 @@
 package com.exam.quiz.controller;
 
+import com.exam.question.model.Question;
 import com.exam.quiz.exception.QuizNotFoundException;
 import com.exam.quiz.model.Quiz;
 import com.exam.quiz.service.QuizService;
@@ -40,6 +41,11 @@ public class QuizController {
     @PutMapping("/{id}")
     public boolean updateQuiz(@RequestBody Quiz quiz, @PathVariable("id") Integer quizId){
         return quizService.updateQuiz(quiz, quizId);
+    }
+
+    @GetMapping("/{id}/questions")
+    public List<Question> getQuestionsByQuizId(@PathVariable("id") Integer quizId) {
+        return quizService.getQuestionsByQuizId(quizId);
     }
 
 }
