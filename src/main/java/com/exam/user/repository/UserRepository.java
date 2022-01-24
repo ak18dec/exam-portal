@@ -2,6 +2,7 @@ package com.exam.user.repository;
 
 import com.exam.common.repository.BaseRepository;
 import com.exam.user.model.User;
+import com.exam.user.repository.resultsetextractors.UserResultSetExtractor;
 import com.exam.user.repository.rowmappers.UserRowMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -52,20 +53,32 @@ public class UserRepository extends BaseRepository {
     //SELECT QUERIES
 
     public User findById(int id){
-        final String sql = "SELECT * FROM users WHERE id=:id";
+        final StringBuilder sql = new StringBuilder();
+        sql.append(" select u.*, r.id as roleId, r.role_name as roleName ");
+        sql.append(" from users u ");
+        sql.append(" join user_role ur on ur.user_id = u.id ");
+        sql.append(" join roles r on r.id = ur.role_id ");
+        sql.append(" where u.id = :id ");
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
-            return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
+            List<User> users = npJdbcTemplate.query(sql.toString(), param, new UserResultSetExtractor());
+            return users != null && !users.isEmpty() ? users.get(0) : null;
         }catch (EmptyResultDataAccessException e){
             return null;
         }
     }
 
     public User findByUsername(String username){
-        final String sql = "SELECT * FROM users WHERE username=:username";
+        final StringBuilder sql = new StringBuilder();
+        sql.append(" select u.*, r.id as roleId, r.role_name as roleName ");
+        sql.append(" from users u ");
+        sql.append(" join user_role ur on ur.user_id = u.id ");
+        sql.append(" join roles r on r.id = ur.role_id ");
+        sql.append(" where u.username = :username ");
         final SqlParameterSource param = new MapSqlParameterSource("username",username);
         try{
-            return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
+            List<User> users = npJdbcTemplate.query(sql.toString(), param, new UserResultSetExtractor());
+            return users != null && !users.isEmpty() ? users.get(0) : null;
         }catch (EmptyResultDataAccessException e){
             return null;
         }
@@ -102,8 +115,13 @@ public class UserRepository extends BaseRepository {
     }
 
     public List<User> findAll(){
+        final StringBuilder sql = new StringBuilder();
+        sql.append(" select u.*, r.id as roleId, r.role_name as roleName ");
+        sql.append(" from users u ");
+        sql.append(" join user_role ur on ur.user_id = u.id ");
+        sql.append(" join roles r on r.id = ur.role_id ");
         try{
-            return npJdbcTemplate.query(FIND_ALL_USERS_QUERY.toString(), new UserRowMapper());
+            return npJdbcTemplate.query(sql.toString(), new UserResultSetExtractor());
         }catch (DataAccessException e){
             return null;
         }
