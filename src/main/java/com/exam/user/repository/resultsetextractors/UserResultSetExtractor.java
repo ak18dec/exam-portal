@@ -28,6 +28,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                 user.setPhone(rs.getString("phone"));
                 user.setEnabled(rs.getBoolean("enabled"));
                 user.setProfile(rs.getString("profile"));
+                userMap.put(userId, user);
             }
             Set<Role> roles = user.getUserRoles();
             if(roles == null || roles.isEmpty()){

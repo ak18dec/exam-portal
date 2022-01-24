@@ -58,7 +58,7 @@ public class UserRepository extends BaseRepository {
         sql.append(" from users u ");
         sql.append(" join user_role ur on ur.user_id = u.id ");
         sql.append(" join roles r on r.id = ur.role_id ");
-        sql.append(" where u.id = :id ");
+        sql.append(" where u.id=:id ");
         final SqlParameterSource param = new MapSqlParameterSource("id",id);
         try{
             List<User> users = npJdbcTemplate.query(sql.toString(), param, new UserResultSetExtractor());
@@ -74,12 +74,12 @@ public class UserRepository extends BaseRepository {
         sql.append(" from users u ");
         sql.append(" join user_role ur on ur.user_id = u.id ");
         sql.append(" join roles r on r.id = ur.role_id ");
-        sql.append(" where u.username = :username ");
+        sql.append(" where u.username=:username ");
         final SqlParameterSource param = new MapSqlParameterSource("username",username);
         try{
             List<User> users = npJdbcTemplate.query(sql.toString(), param, new UserResultSetExtractor());
             return users != null && !users.isEmpty() ? users.get(0) : null;
-        }catch (EmptyResultDataAccessException e){
+        }catch (DataAccessException e){
             return null;
         }
     }
