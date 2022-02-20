@@ -84,4 +84,14 @@ public class Question {
                 ", questionChoices=" + questionChoices +
                 '}';
     }
+
+    public String getCorrectChoice() {
+        String correctChoice = "";
+        for (QuestionChoice choice : questionChoices) {
+            if(choice.isCorrect()){
+                correctChoice = choice.getDescription();
+            }
+        }
+        return correctChoice;
+    }
 }
