@@ -25,7 +25,7 @@ public class UserQuizService {
     public Double submitQuiz(UserAttemptedQuiz quiz) {
         double score = evaluateQuiz(quiz);
         quiz.setScore(score);
-//        userQuizRepository.submitQiuz(quiz);
+//        userQuizRepository.submitQuiz(quiz); //can be made asynchronous multi-threaded call
         return score;
     }
 

@@ -90,6 +90,7 @@ public class Question {
         for (QuestionChoice choice : questionChoices) {
             if(choice.isCorrect()){
                 correctChoice = choice.getDescription();
+                break;
             }
         }
         return correctChoice;

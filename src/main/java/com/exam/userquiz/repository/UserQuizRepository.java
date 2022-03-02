@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserQuizRepository {
 
     @Transactional
-    public int submitQiuz(UserAttemptedQuiz quiz) {
+    public int submitQuiz(UserAttemptedQuiz quiz) {
         return -1;
     }
 }
