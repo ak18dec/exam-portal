@@ -6,16 +6,18 @@ public class ScoreDetails {
     private int incorrectQuestions = 0;
     private int totalQuestions = 0;
     private int totalAttemptedQuestions = 0;
+    private String certificateId;
 
     public ScoreDetails() {
     }
 
-    public ScoreDetails(double score, int correctQuestions, int incorrectQuestions, int totalQuestions, int totalAttemptedQuestions) {
+    public ScoreDetails(double score, int correctQuestions, int incorrectQuestions, int totalQuestions, int totalAttemptedQuestions, String certificateId) {
         this.score = score;
         this.correctQuestions = correctQuestions;
         this.incorrectQuestions = incorrectQuestions;
         this.totalQuestions = totalQuestions;
         this.totalAttemptedQuestions = totalAttemptedQuestions;
+        this.certificateId = certificateId;
     }
 
     public double getScore() {
@@ -58,6 +60,14 @@ public class ScoreDetails {
         this.totalAttemptedQuestions = totalAttemptedQuestions;
     }
 
+    public String getCertificateId() {
+        return certificateId;
+    }
+
+    public void setCertificateId(String certificateId) {
+        this.certificateId = certificateId;
+    }
+
     @Override
     public String toString() {
         return "ScoreDetails{" +
@@ -66,6 +76,7 @@ public class ScoreDetails {
                 ", incorrectQuestions=" + incorrectQuestions +
                 ", totalQuestions=" + totalQuestions +
                 ", totalAttemptedQuestions=" + totalAttemptedQuestions +
+                ", certificateId='" + certificateId + '\'' +
                 '}';
     }
 }

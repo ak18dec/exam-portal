@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class UserQuizService {
@@ -62,8 +63,13 @@ public class UserQuizService {
         scoreDetails.setIncorrectQuestions(incorrectQuestions);
         scoreDetails.setTotalAttemptedQuestions(totalAttemptedQuestions);
         scoreDetails.setTotalQuestions(totalQuestions);
+        scoreDetails.setCertificateId(generateCertificateId());
 
         return scoreDetails;
+    }
+
+    private String generateCertificateId(){
+        return UUID.randomUUID().toString();
     }
 
 }
