@@ -194,3 +194,40 @@
 --ADD CONSTRAINT fk_instr_quiz_id
 --FOREIGN KEY (quiz_id) REFERENCES quiz(id);
 
+
+--create table user_attempted_quiz (
+--	id serial primary key,
+--	attempted_quiz_id int not null,
+--	user_id int not null,
+--	user_full_name varchar not null,
+--	username varchar not null,
+--	attempted_on timestamp,
+--	proficiency varchar,
+--	max_marks int,
+--	max_time int,
+--	user_time int,
+--	score decimal
+--)
+
+--alter table user_attempted_quiz
+--add constraint fk_usr_attempted_quiz_id
+--foreign key (attempted_quiz_id) references attempted_quiz(id);
+
+
+--create table attempted_quiz (
+--	id serial primary key,
+--	title varchar ,
+--	description varchar
+--)
+
+--create table attempted_quiz_questions (
+--	id serial primary key,
+--	attempted_quiz_id int not null,
+--	question varchar,
+--	option_selected varchar
+--)
+
+--alter table attempted_quiz_questions
+--add constraint fk_attempted_quiz_id
+--foreign key (attempted_quiz_id) references attempted_quiz(id);
+

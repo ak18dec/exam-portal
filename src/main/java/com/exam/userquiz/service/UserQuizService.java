@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class UserQuizService {
@@ -26,7 +25,7 @@ public class UserQuizService {
     public ScoreDetails submitQuiz(UserAttemptedQuiz quiz) {
         ScoreDetails scoreDetails = evaluateQuiz(quiz);
         quiz.setScore(scoreDetails.getScore());
-//        userQuizRepository.submitQuiz(quiz); //can be made asynchronous multi-threaded call
+        userQuizRepository.submitQuiz(quiz); //asynchronous call
         return scoreDetails;
     }
 
@@ -63,13 +62,6 @@ public class UserQuizService {
         scoreDetails.setIncorrectQuestions(incorrectQuestions);
         scoreDetails.setTotalAttemptedQuestions(totalAttemptedQuestions);
         scoreDetails.setTotalQuestions(totalQuestions);
-        scoreDetails.setCertificateId(generateCertificateId());
-
         return scoreDetails;
     }
-
-    private String generateCertificateId(){
-        return UUID.randomUUID().toString();
-    }
-
 }
