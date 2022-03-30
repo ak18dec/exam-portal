@@ -1,6 +1,7 @@
 package com.exam.userquiz.repository;
 
 import com.exam.common.repository.BaseRepository;
+import com.exam.proficiency.model.Level;
 import com.exam.userquiz.model.AttemptedQuiz;
 import com.exam.userquiz.model.AttemptedQuizQuestion;
 import com.exam.userquiz.model.UserAttemptedQuiz;
@@ -28,7 +29,7 @@ public class UserQuizRepository extends BaseRepository {
 
         final StringBuilder sql = new StringBuilder("INSERT INTO user_attempted_quiz ");
         sql.append("(attempted_quiz_id, user_id, user_full_name, username, attempted_on, proficiency, max_marks, max_time, user_time, score)");
-        sql.append(" VALUES (:quizId, :description, :published, :proficiencyId, :maxMarks, :maxTime, :instructionEnabled, :createdBy, :modifiedBy");
+        sql.append(" VALUES (:quizId, :userId, :userFullName, :username, :attemptedOn, :proficiency, :maxMarks, :maxTime, :userTime, :score");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
@@ -37,7 +38,7 @@ public class UserQuizRepository extends BaseRepository {
         param.addValue("userFullName", userAttemptedQuiz.getUserFullName());
         param.addValue("username", userAttemptedQuiz.getUsername());
         param.addValue("attemptedOn", userAttemptedQuiz.getAttemptedOn());
-        param.addValue("proficiency", userAttemptedQuiz.getProficiencyId());
+        param.addValue("proficiency", getProficiencyLevel(userAttemptedQuiz.getProficiencyId()));
         param.addValue("maxMarks", userAttemptedQuiz.getMaxMarks());
         param.addValue("maxTime", userAttemptedQuiz.getMaxTime());
         param.addValue("userTime", userAttemptedQuiz.getUserTime());
@@ -89,5 +90,16 @@ public class UserQuizRepository extends BaseRepository {
             params.add(source);
         }
         return npJdbcTemplate.batchUpdate(sql, params.toArray(new MapSqlParameterSource[0]));
+    }
+
+    private String getProficiencyLevel(int proficiencyId) {
+        if(proficiencyId == 1) {
+            return Level.EASY.label;
+        } else if(proficiencyId == 2){
+            return Level.MEDIUM.label;
+        } else if(proficiencyId == 3){
+            return Level.HARD.label;
+        }
+        return "";
     }
 }
