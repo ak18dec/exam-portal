@@ -104,12 +104,28 @@ public class UserRepository extends BaseRepository {
         }
     }
 
+//    public User findByEmail(String email){
+//        final String sql = "SELECT * FROM users WHERE email=:email";
+//        final SqlParameterSource param = new MapSqlParameterSource("email",email);
+//        try{
+//            return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
+//        }catch (EmptyResultDataAccessException e){
+//            return null;
+//        }
+//    }
+
     public User findByEmail(String email){
-        final String sql = "SELECT * FROM users WHERE email=:email";
+        final StringBuilder sql = new StringBuilder();
+        sql.append(" select u.*, r.id as roleId, r.role_name as roleName ");
+        sql.append(" from users u ");
+        sql.append(" join user_role ur on ur.user_id = u.id ");
+        sql.append(" join roles r on r.id = ur.role_id ");
+        sql.append(" where u.email=:email ");
         final SqlParameterSource param = new MapSqlParameterSource("email",email);
         try{
-            return (User) npJdbcTemplate.queryForObject(sql, param, new UserRowMapper());
-        }catch (EmptyResultDataAccessException e){
+            List<User> users = npJdbcTemplate.query(sql.toString(), param, new UserResultSetExtractor());
+            return users != null && !users.isEmpty() ? users.get(0) : null;
+        }catch (DataAccessException e){
             return null;
         }
     }
