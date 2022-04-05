@@ -29,7 +29,7 @@ public class UserRepository extends BaseRepository {
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("username", user.getUsername());
+        param.addValue("username", user.getEmail());
         param.addValue("password", user.getPassword());
         param.addValue("firstName", user.getFirstName());
         param.addValue("lastName", user.getLastName());
@@ -87,6 +87,16 @@ public class UserRepository extends BaseRepository {
     public boolean userExistsByUsername(String username){
         final String sql = "SELECT EXISTS(SELECT 1 FROM users where username=:username)";
         MapSqlParameterSource param = new MapSqlParameterSource("username", username);
+        try {
+            return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
+        }catch (EmptyResultDataAccessException e){
+            return false;
+        }
+    }
+
+    public boolean userExistsByEmail(String email){
+        final String sql = "SELECT EXISTS(SELECT 1 FROM users where email=:email)";
+        MapSqlParameterSource param = new MapSqlParameterSource("email", email);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
         }catch (EmptyResultDataAccessException e){

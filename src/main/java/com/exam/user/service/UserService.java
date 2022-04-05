@@ -18,10 +18,10 @@ public class UserService {
 
     public User createUser(User user, int loggedInUserId) throws Exception {
 
-        final boolean userExistWithUsername = userRepository.userExistsByUsername(user.getUsername());
+        final boolean userExistWithEmail = userRepository.userExistsByEmail(user.getEmail());
 
-        if(userExistWithUsername){
-            throw new UserAlreadyExistsException(ExceptionConstants.USER_ALREADY_EXISTS+user.getUsername());
+        if(userExistWithEmail){
+            throw new UserAlreadyExistsException(ExceptionConstants.USER_ALREADY_EXISTS+user.getEmail());
         }else{
             int newUserId = userRepository.addUser(user, loggedInUserId);
             user.setId(newUserId);
