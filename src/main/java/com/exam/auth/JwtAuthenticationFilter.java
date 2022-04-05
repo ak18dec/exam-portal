@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("Request Header Token: " + requestHeaderToken);
         String usernameOrEmail = null;
         String jwtToken = null;
-        UserDetails userDetails = null;
 
         if (requestHeaderToken != null && requestHeaderToken.startsWith("Bearer ")) {
 
@@ -43,15 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //validated
         if (usernameOrEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            if(usernameOrEmail.contains("@")){
-                try {
-                     userDetails = this.userDetailsService.loadUserByEmail(usernameOrEmail);
-                } catch (UserNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                userDetails = this.userDetailsService.loadUserByUsername(usernameOrEmail);
-            }
+            final UserDetails userDetails = this.userDetailsService.loadUserByUsername(usernameOrEmail);
             if (this.jwtUtill.validateToken(jwtToken, userDetails)) {
 
                 //valid token

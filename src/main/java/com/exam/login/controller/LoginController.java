@@ -35,19 +35,14 @@ public class LoginController {
         authenticate(request.getUsernameOrEmail(), request.getPassword());
 
         //user is authenticated
-        UserDetails userDetails = null;
-        if(request.getUsernameOrEmail().contains("@")){
-            userDetails = this.userDetailsService.loadUserByEmail(request.getUsernameOrEmail());
-        }else {
-            userDetails = this.userDetailsService.loadUserByUsername(request.getUsernameOrEmail());
-        }
+        final UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsernameOrEmail());
         String token = this.jwtUtill.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    private void authenticate(String email, String password) throws UserDisabledException, InvalidCredentialsException {
+    private void authenticate(String usernameOrEmail, String password) throws UserDisabledException, InvalidCredentialsException {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usernameOrEmail, password));
         } catch (DisabledException e) {
             throw new DisabledException(ExceptionConstants.USER_IS_DISABLED + " : " + e.getMessage(), e);
         } catch (BadCredentialsException e) {

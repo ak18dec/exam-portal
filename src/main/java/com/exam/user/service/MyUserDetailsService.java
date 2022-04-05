@@ -20,31 +20,23 @@ public class MyUserDetailsService implements UserDetailsService {
 
         User user = null;
         try {
-            user = userService.getUserByUsername(s);
+            if(s.contains("@")){
+                user = userService.getUserByEmail(s);
+            }else {
+                user = userService.getUserByUsername(s);
+            }
+
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
 
         if(user == null){
-            throw new UsernameNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_USERNAME +s);
+            if(s.contains("@")){
+                throw new UsernameNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_EMAIL +s);
+            }else {
+                throw new UsernameNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_USERNAME + s);
+            }
         }
-
-        return user;
-    }
-
-    public UserDetails loadUserByEmail(String s) throws UserNotFoundException {
-
-        User user = null;
-        try {
-            user = userService.getUserByEmail(s);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if(user == null){
-            throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_EMAIL +s);
-        }
-
         return user;
     }
 }

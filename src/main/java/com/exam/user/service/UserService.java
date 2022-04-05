@@ -69,12 +69,4 @@ public class UserService {
     public boolean updateUserStatus(int id, boolean status, int loggedInUserId){
         return userRepository.updateUserStatus(id, status, loggedInUserId);
     }
-
-    public User getUserByEmail(String email) throws UserNotFoundException {
-        final User user = userRepository.findByEmail(email);
-        if(user == null){
-            throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_EMAIL +email);
-        }
-        return user;
-    }
 }
