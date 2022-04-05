@@ -1,5 +1,6 @@
 package com.exam.auth;
 
+import com.exam.user.exception.UserNotFoundException;
 import com.exam.user.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,20 +29,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestHeaderToken = request.getHeader("Authorization");
         System.out.println("Request Header Token: " + requestHeaderToken);
-        String username = null;
+        String usernameOrEmail = null;
         String jwtToken = null;
+        UserDetails userDetails = null;
 
         if (requestHeaderToken != null && requestHeaderToken.startsWith("Bearer ")) {
 
             jwtToken = requestHeaderToken.substring(7);  //removing string bearer with ending space from token
 
-            username = this.jwtUtill.extractUsername(jwtToken);
+            usernameOrEmail = this.jwtUtill.extractUsername(jwtToken);
 
         }
 
         //validated
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            final UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        if (usernameOrEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if(usernameOrEmail.contains("@")){
+                try {
+                     userDetails = this.userDetailsService.loadUserByEmail(usernameOrEmail);
+                } catch (UserNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                userDetails = this.userDetailsService.loadUserByUsername(usernameOrEmail);
+            }
             if (this.jwtUtill.validateToken(jwtToken, userDetails)) {
 
                 //valid token
