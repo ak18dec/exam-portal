@@ -36,14 +36,16 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getUserByUsername(@RequestParam(value = "username") String username) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.getUserByUsername(username));
+    public ResponseEntity<?> getUserByUsername(@RequestParam(value = "username") String username, @RequestParam(value = "email") String email) throws UserNotFoundException {
+        User user = null;
+        if(email != null && !email.isEmpty()){
+            user = userService.getUserByEmail(email);
+        }else {
+            user = userService.getUserByUsername(username);
+        }
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping()
-    public ResponseEntity<?> getUserByEmail(@RequestParam(value = "email") String email) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.getUserByEmail(email));
-    }
 
     //POST API
 
