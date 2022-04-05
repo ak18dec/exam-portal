@@ -31,8 +31,8 @@ public class UserRepository extends BaseRepository {
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("username", user.getEmail());
         param.addValue("password", user.getPassword());
-        param.addValue("firstName", user.getFirstName());
-        param.addValue("lastName", user.getLastName());
+        param.addValue("firstName", "");
+        param.addValue("lastName", "");
         param.addValue("email", user.getEmail());
         param.addValue("phone", user.getPhone());
         param.addValue("enabled", user.isEnabled());
