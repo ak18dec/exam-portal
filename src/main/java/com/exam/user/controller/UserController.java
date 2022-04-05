@@ -40,6 +40,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getUserByEmail(@RequestParam(value = "email") String email) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getUserByEmail(email));
+    }
+
     //POST API
 
     @PostMapping("/")
