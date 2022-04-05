@@ -2,23 +2,23 @@ package com.exam.login.model;
 
 public class JwtRequest {
 
-    private String username;
+    private String usernameOrEmail;
     private String password;
 
     public JwtRequest() {
     }
 
-    public JwtRequest(String username, String password) {
-        this.username = username;
+    public JwtRequest(String usernameOrEmail, String password) {
+        this.usernameOrEmail = usernameOrEmail;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUsernameOrEmail() {
+        return usernameOrEmail;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsernameOrEmail(String usernameOrEmail) {
+        this.usernameOrEmail = usernameOrEmail;
     }
 
     public String getPassword() {

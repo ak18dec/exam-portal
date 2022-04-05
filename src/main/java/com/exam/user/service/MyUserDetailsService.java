@@ -31,4 +31,20 @@ public class MyUserDetailsService implements UserDetailsService {
 
         return user;
     }
+
+    public UserDetails loadUserByEmail(String s) throws UserNotFoundException {
+
+        User user = null;
+        try {
+            user = userService.getUserByEmail(s);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(user == null){
+            throw new UserNotFoundException(ExceptionConstants.USER_NOT_FOUND_FOR_EMAIL +s);
+        }
+
+        return user;
+    }
 }

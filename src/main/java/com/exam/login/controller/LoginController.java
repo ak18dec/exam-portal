@@ -32,17 +32,22 @@ public class LoginController {
     @PostMapping("/generate-token")
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest request) throws Exception {
 
-        authenticate(request.getUsername(), request.getPassword());
+        authenticate(request.getUsernameOrEmail(), request.getPassword());
 
         //user is authenticated
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsername());
+        UserDetails userDetails = null;
+        if(request.getUsernameOrEmail().contains("@")){
+            userDetails = this.userDetailsService.loadUserByEmail(request.getUsernameOrEmail());
+        }else {
+            userDetails = this.userDetailsService.loadUserByUsername(request.getUsernameOrEmail());
+        }
         String token = this.jwtUtill.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    private void authenticate(String username, String password) throws UserDisabledException, InvalidCredentialsException {
+    private void authenticate(String email, String password) throws UserDisabledException, InvalidCredentialsException {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException e) {
             throw new DisabledException(ExceptionConstants.USER_IS_DISABLED + " : " + e.getMessage(), e);
         } catch (BadCredentialsException e) {
