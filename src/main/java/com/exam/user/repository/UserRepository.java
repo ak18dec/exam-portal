@@ -43,6 +43,33 @@ public class UserRepository extends BaseRepository {
         try{
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             npJdbcTemplate.update(sql.toString(), param, generatedKeyHolder);
+            int userId = generatedKeyHolder.getKey().intValue();
+            if(userId > 0){
+                int user_role_mapping_id = addUserRole(userId, "ROLE_NORMAL");
+            }
+
+            return userId;
+        }catch (EmptyResultDataAccessException e){
+            return -1;
+        }
+    }
+
+    private int addUserRole(int userId, String userRole) {
+        int roleId = -1;
+        if(userRole.equals("ROLE_NORMAL")){
+            roleId = 2;
+        }else {
+            roleId = 1;
+        }
+        final StringBuilder sql = new StringBuilder("INSERT INTO user_role(user_id, role_id) ");
+        sql.append(" VALUES (:userId, :roleId) RETURNING id");
+
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("userId", userId);
+        param.addValue("roleId", roleId);
+        try{
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            npJdbcTemplate.update(sql.toString(), param, generatedKeyHolder);
             return generatedKeyHolder.getKey().intValue();
         }catch (EmptyResultDataAccessException e){
             return -1;
