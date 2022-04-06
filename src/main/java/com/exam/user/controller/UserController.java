@@ -51,6 +51,7 @@ public class UserController {
 
     @PostMapping("/")
     public User addUser(@RequestBody User user) throws Exception {
+        System.out.println(user.toString());
         return userService.createUser(user,1);
     }
 
