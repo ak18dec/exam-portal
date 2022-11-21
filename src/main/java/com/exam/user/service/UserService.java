@@ -1,9 +1,11 @@
 package com.exam.user.service;
 
 import com.exam.common.constant.ExceptionConstants;
+import com.exam.notification.email.service.EmailService;
 import com.exam.user.exception.UserAlreadyExistsException;
 import com.exam.user.exception.UserNotFoundException;
 import com.exam.user.model.User;
+import com.exam.otp.repository.OTPRepository;
 import com.exam.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private OTPRepository otpRepository;
 
     public User createUser(User user, int loggedInUserId) throws Exception {
 

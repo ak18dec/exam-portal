@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * This class is from JAVA BRAINS git hub repo
+ * This class is from JAVA BRAINS GitHub repo
  */
 
 @Component
