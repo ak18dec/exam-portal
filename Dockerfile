@@ -5,6 +5,6 @@ RUN mvn -f /home/app/pom.xml clean package -Dmaven.test.skip -DskipTests
 
 
 FROM openjdk:17-jdk-alpine
-COPY --from=maven_build /app/target/simple-spring-application-0.0.1-SNAPSHOT.jar /usr/local/lib/exam-portal.jar
+COPY --from=maven_build /app/target/exam-portal.jar /usr/local/lib/exam-portal.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/local/lib/exam-portal.jar"]
