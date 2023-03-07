@@ -14,7 +14,8 @@ ARG DOCKER_PACKAGING_DIR=/app/target/docker-packaging
 COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/BOOT-INF/lib /app/lib
 COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/BOOT-INF/classes /app/classes
 COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/META-INF /app/META-INF
+COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/exam-portal.jar /app/exam-portal.jar
 
-ADD /app/target/docker-packaging/exam-portal.jar exam-portal.jar
 ENTRYPOINT ["java", "-jar","exam-portal.jar"]
+
 EXPOSE 8080
