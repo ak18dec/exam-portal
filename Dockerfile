@@ -17,4 +17,4 @@ COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/META-INF /app/META-INF
 
 EXPOSE 8080
 # Run the Jar file
-ENTRYPOINT ["java", "-jar", "/exam-portal*.jar"]
+ENTRYPOINT ["java", "-jar", "/exam-portal.jar"]
