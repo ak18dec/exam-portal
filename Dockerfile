@@ -6,6 +6,15 @@ RUN addgroup -S app && adduser -S app -G app
 # Use user app
 USER app
 
+
+WORKDIR /app
+
+COPY pom.xml .
+
+COPY src ./src
+
+RUN mvn clean install
+
 # Copy the jar file into the docker image
 COPY target/*.jar app.jar
 
