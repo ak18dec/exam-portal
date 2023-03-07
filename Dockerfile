@@ -15,8 +15,6 @@ COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/BOOT-INF/lib /app/lib
 COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/BOOT-INF/classes /app/classes
 COPY --from=maven_build ${DOCKER_PACKAGING_DIR}/META-INF /app/META-INF
 
+ADD /app/target/docker-packaging/exam-portal.jar exam-portal.jar
+ENTRYPOINT ["java", "-jar","exam-portal.jar"]
 EXPOSE 8080
-
-CMD java -cp .:classes:lib/* \
-         -Djava.security.egd=file:/dev/./urandom \
-         com.exam.ExamPortalApplication.java
