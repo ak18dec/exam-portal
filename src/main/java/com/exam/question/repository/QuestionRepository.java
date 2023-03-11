@@ -62,7 +62,7 @@ public class QuestionRepository extends BaseRepository {
     }
 
     private int addQuestionChoice(QuestionChoice questionChoice, int loggedInUserId) {
-        final StringBuilder sql = new StringBuilder("INSERT INTO exam.question_choices ");
+        final StringBuilder sql = new StringBuilder("INSERT INTO question_choices ");
         sql.append("(description, enabled, correct, ques_id, created_by, modified_by)");
         sql.append("VALUES(:description, :enabled, :correct, :ques_id, :createdBy, :modifiedBy)");
         sql.append(" RETURNING id");
