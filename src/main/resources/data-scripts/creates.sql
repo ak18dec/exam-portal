@@ -442,3 +442,5 @@
 --	created_on timestamp default current_timestamp,
 --	used boolean not null
 --);
+
+-- 
