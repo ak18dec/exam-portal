@@ -8,7 +8,7 @@ public class UserAttemptedQuiz {
     private String userFullName;
     private String username;
     private Date attemptedOn;
-    private int proficiencyId;
+    private String proficiency;
     private int maxMarks;
     private int maxTime;
     private int userTime;
@@ -19,14 +19,14 @@ public class UserAttemptedQuiz {
     }
 
     public UserAttemptedQuiz(int id, int userId, String userFullName, String username, Date attemptedOn,
-                                  int proficiencyId, int maxMarks, int maxTime, int userTime, double score,
-                                  AttemptedQuiz quiz) {
+                             String proficiency, int maxMarks, int maxTime, int userTime, double score,
+                             AttemptedQuiz quiz) {
         this.id = id;
         this.userId = userId;
         this.userFullName = userFullName;
         this.username = username;
         this.attemptedOn = attemptedOn;
-        this.proficiencyId = proficiencyId;
+        this.proficiency = proficiency;
         this.maxMarks = maxMarks;
         this.maxTime = maxTime;
         this.userTime = userTime;
@@ -74,12 +74,12 @@ public class UserAttemptedQuiz {
         this.attemptedOn = attemptedOn;
     }
 
-    public int getProficiencyId() {
-        return proficiencyId;
+    public String getProficiency() {
+        return proficiency;
     }
 
-    public void setProficiencyId(int proficiencyId) {
-        this.proficiencyId = proficiencyId;
+    public void setProficiency(String proficiency) {
+        this.proficiency = proficiency;
     }
 
     public int getMaxMarks() {
@@ -130,7 +130,7 @@ public class UserAttemptedQuiz {
                 ", userFullName='" + userFullName + '\'' +
                 ", username='" + username + '\'' +
                 ", attemptedOn=" + attemptedOn +
-                ", proficiencyId=" + proficiencyId +
+                ", proficiency=" + proficiency +
                 ", maxMarks=" + maxMarks +
                 ", maxTime=" + maxTime +
                 ", userTime=" + userTime +

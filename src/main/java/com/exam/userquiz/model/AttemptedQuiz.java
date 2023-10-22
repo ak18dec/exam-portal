@@ -7,18 +7,14 @@ public class AttemptedQuiz {
     private String title;
     private String description;
     private List<AttemptedQuizQuestion> questions;
-    private List<String> instructions;
-
     public AttemptedQuiz() {
     }
 
-    public AttemptedQuiz(int id, String title, String description, List<AttemptedQuizQuestion> questions,
-                         List<String> instructions) {
+    public AttemptedQuiz(int id, String title, String description, List<AttemptedQuizQuestion> questions) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.questions = questions;
-        this.instructions = instructions;
     }
 
     public int getId() {
@@ -53,13 +49,6 @@ public class AttemptedQuiz {
         this.questions = questions;
     }
 
-    public List<String> getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(List<String> instructions) {
-        this.instructions = instructions;
-    }
 
     @Override
     public String toString() {
@@ -68,7 +57,6 @@ public class AttemptedQuiz {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", questions=" + questions +
-                ", instructions=" + instructions +
                 '}';
     }
 }

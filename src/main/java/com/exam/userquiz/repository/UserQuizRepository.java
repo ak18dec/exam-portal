@@ -1,7 +1,6 @@
 package com.exam.userquiz.repository;
 
 import com.exam.common.repository.BaseRepository;
-import com.exam.proficiency.model.Level;
 import com.exam.userquiz.model.AttemptedQuiz;
 import com.exam.userquiz.model.AttemptedQuizQuestion;
 import com.exam.userquiz.model.UserAttemptedQuiz;
@@ -38,11 +37,11 @@ public class UserQuizRepository extends BaseRepository {
         param.addValue("userFullName", userAttemptedQuiz.getUserFullName());
         param.addValue("username", userAttemptedQuiz.getUsername());
         param.addValue("attemptedOn", userAttemptedQuiz.getAttemptedOn());
-        param.addValue("proficiency", getProficiencyLevel(userAttemptedQuiz.getProficiencyId()));
         param.addValue("maxMarks", userAttemptedQuiz.getMaxMarks());
         param.addValue("maxTime", userAttemptedQuiz.getMaxTime());
         param.addValue("userTime", userAttemptedQuiz.getUserTime());
         param.addValue("score", userAttemptedQuiz.getScore());
+        param.addValue("proficiency", userAttemptedQuiz.getProficiency());
 
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
@@ -92,14 +91,4 @@ public class UserQuizRepository extends BaseRepository {
         return npJdbcTemplate.batchUpdate(sql, params.toArray(new MapSqlParameterSource[0]));
     }
 
-    private String getProficiencyLevel(int proficiencyId) {
-        if(proficiencyId == 1) {
-            return Level.EASY.label;
-        } else if(proficiencyId == 2){
-            return Level.MEDIUM.label;
-        } else if(proficiencyId == 3){
-            return Level.HARD.label;
-        }
-        return "";
-    }
 }
