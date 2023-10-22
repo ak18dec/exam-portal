@@ -23,10 +23,10 @@ public class QuestionService {
     }
 
     public Question addQuestion(Question question, int loggedInUserId) throws QuestionAlreadyExistsException {
-        final boolean questionExistWithContent = questionRepository.questionExistsByContent(question.getContent());
+        final boolean questionExistsByDescription = questionRepository.questionExistsByDescription(question.getDescription());
 
-        if(questionExistWithContent){
-            throw new QuestionAlreadyExistsException(QUESTION_ALREADY_EXISTS+question.getContent());
+        if(questionExistsByDescription){
+            throw new QuestionAlreadyExistsException(QUESTION_ALREADY_EXISTS+question.getDescription());
         }else{
             int newQuestionId = questionRepository.addQuestion(question, loggedInUserId);
             question.setId(newQuestionId);
@@ -39,14 +39,6 @@ public class QuestionService {
         final Question question = questionRepository.findById(questionId);
         if(question == null) {
             throw new QuestionNotFoundException(QUESTION_NOT_FOUND_FOR_ID+questionId);
-        }
-        return question;
-    }
-
-    public Question getQuestionByTitle(String title) throws QuestionNotFoundException {
-        final Question question = questionRepository.findByTitle(title);
-        if(question == null) {
-            throw new QuestionNotFoundException(QUESTION_NOT_FOUND_FOR_TITLE+title);
         }
         return question;
     }

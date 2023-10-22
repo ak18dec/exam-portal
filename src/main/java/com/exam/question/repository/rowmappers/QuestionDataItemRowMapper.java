@@ -14,9 +14,9 @@ public class QuestionDataItemRowMapper implements RowMapper {
     public Object mapRow(ResultSet rs, int i) throws SQLException {
         QuestionDataItem questionDataItem = new QuestionDataItem();
         questionDataItem.setId(rs.getInt("id"));
-        questionDataItem.setContent(rs.getString("content"));
+        questionDataItem.setDescription(rs.getString("description"));
         questionDataItem.setEnabled(rs.getBoolean("enabled"));
-        questionDataItem.setProficiencyId(rs.getInt("proficiency_id"));
+        questionDataItem.setProficiency(rs.getString("proficiency"));
         questionDataItem.setTopicId(rs.getInt("topic_id"));
 
         QuestionChoice questionChoice = new QuestionChoice();

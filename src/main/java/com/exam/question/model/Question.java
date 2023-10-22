@@ -4,11 +4,9 @@ import java.util.List;
 
 public class Question {
 
-    //Genre -> Subject -> Category -> Topic -> Question
-
     private int id;
-    private String content;
-    private int proficiencyId;
+    private String description;
+    private String proficiency;
     private boolean enabled;
     private int topicId;
     private List<QuestionChoice> questionChoices;
@@ -16,10 +14,10 @@ public class Question {
     public Question() {
     }
 
-    public Question(int id, String content, int proficiencyId, boolean enabled, int topicId, List<QuestionChoice> questionChoices) {
+    public Question(int id, String description, String proficiency, boolean enabled, int topicId, List<QuestionChoice> questionChoices) {
         this.id = id;
-        this.content = content;
-        this.proficiencyId = proficiencyId;
+        this.description = description;
+        this.proficiency = proficiency;
         this.enabled = enabled;
         this.topicId = topicId;
         this.questionChoices = questionChoices;
@@ -33,12 +31,12 @@ public class Question {
         this.id = id;
     }
 
-    public int getProficiencyId() {
-        return proficiencyId;
+    public String getProficiency() {
+        return proficiency;
     }
 
-    public void setProficiencyId(int proficiencyId) {
-        this.proficiencyId = proficiencyId;
+    public void setProficiency(String proficiency) {
+        this.proficiency = proficiency;
     }
 
     public boolean isEnabled() {
@@ -57,12 +55,12 @@ public class Question {
         this.topicId = topicId;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<QuestionChoice> getQuestionChoices() {
@@ -77,8 +75,8 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", content='" + content + '\'' +
-                ", proficiencyId=" + proficiencyId +
+                ", content='" + description + '\'' +
+                ", proficiency=" + proficiency +
                 ", enabled=" + enabled +
                 ", topicId=" + topicId +
                 ", questionChoices=" + questionChoices +

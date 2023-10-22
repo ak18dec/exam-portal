@@ -11,9 +11,9 @@ public class QuestionRowMapper implements RowMapper {
     public Object mapRow(ResultSet rs, int i) throws SQLException {
         Question question = new Question();
         question.setId(rs.getInt("id"));
-        question.setContent(rs.getString("content"));
+        question.setDescription(rs.getString("content"));
         question.setEnabled(rs.getBoolean("enabled"));
-        question.setProficiencyId(rs.getInt("proficiency_id"));
+        question.setProficiency(rs.getString("proficiency"));
         question.setTopicId(rs.getInt("topic_id"));
         return question;
     }

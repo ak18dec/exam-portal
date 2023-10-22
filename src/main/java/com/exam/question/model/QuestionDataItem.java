@@ -3,8 +3,8 @@ package com.exam.question.model;
 public class QuestionDataItem {
 
     private int id;
-    private String content;
-    private int proficiencyId;
+    private String description;
+    private String proficiency;
     private boolean enabled;
     private int topicId;
     private QuestionChoice questionChoice;
@@ -12,10 +12,10 @@ public class QuestionDataItem {
     public QuestionDataItem() {
     }
 
-    public QuestionDataItem(int id, String content, int proficiencyId, boolean enabled, int topicId, QuestionChoice questionChoice) {
+    public QuestionDataItem(int id, String description, String proficiency, boolean enabled, int topicId, QuestionChoice questionChoice) {
         this.id = id;
-        this.content = content;
-        this.proficiencyId = proficiencyId;
+        this.description = description;
+        this.proficiency = proficiency;
         this.enabled = enabled;
         this.topicId = topicId;
         this.questionChoice = questionChoice;
@@ -29,20 +29,20 @@ public class QuestionDataItem {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getProficiencyId() {
-        return proficiencyId;
+    public String getProficiency() {
+        return proficiency;
     }
 
-    public void setProficiencyId(int proficiencyId) {
-        this.proficiencyId = proficiencyId;
+    public void setProficiency(String proficiency) {
+        this.proficiency = proficiency;
     }
 
     public boolean isEnabled() {
@@ -73,8 +73,8 @@ public class QuestionDataItem {
     public String toString() {
         return "QuestionDataItem{" +
                 "id=" + id +
-                ", content='" + content + '\'' +
-                ", proficiencyId=" + proficiencyId +
+                ", description='" + description + '\'' +
+                ", proficiency=" + proficiency +
                 ", enabled=" + enabled +
                 ", topicId=" + topicId +
                 ", questionChoice=" + questionChoice +

@@ -29,14 +29,14 @@ public class QuestionRepository extends BaseRepository {
 
     @Transactional
     public int addQuestion(Question question, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO questions(content, enabled, proficiency_id, topic_id, created_by, modified_by)");
-        sql.append(" VALUES (:content, :enabled, :proficiencyId, :topicId, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO questions(description, enabled, proficiency, topic_id, created_by, modified_by)");
+        sql.append(" VALUES (:description, :enabled, :proficiency, :topicId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("content", question.getContent());
+        param.addValue("description", question.getDescription());
         param.addValue("enabled", question.isEnabled());
-        param.addValue("proficiencyId", question.getProficiencyId());
+        param.addValue("proficiency", question.getProficiency());
         param.addValue("topicId", question.getTopicId());
         param.addValue("createdBy", loggedInUserId);
         param.addValue("modifiedBy", loggedInUserId);
@@ -109,7 +109,7 @@ public class QuestionRepository extends BaseRepository {
     public Question findByTitle(String title){
         final StringBuilder sql = new StringBuilder("SELECT q.* , ");
         sql.append("qc.id as qc_id, ");
-        sql.append("qc.content as qc_desc, ");
+        sql.append("qc.description as qc_desc, ");
         sql.append("qc.enabled as qc_enabled, ");
         sql.append("qc.correct as qc_correct ");
         sql.append("FROM questions q ");
@@ -149,9 +149,9 @@ public class QuestionRepository extends BaseRepository {
             if(question == null){
                 question = new Question();
                 question.setId(item.getId());
-                question.setContent(item.getContent());
+                question.setDescription(item.getDescription());
                 question.setEnabled(item.isEnabled());
-                question.setProficiencyId(item.getProficiencyId());
+                question.setProficiency(item.getProficiency());
                 question.setTopicId(item.getTopicId());
 
                 List<QuestionChoice> choices = new ArrayList<>();
@@ -197,9 +197,9 @@ public class QuestionRepository extends BaseRepository {
         }
     }
 
-    public boolean questionExistsByContent(String content){
-        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where content=:content)";
-        MapSqlParameterSource param = new MapSqlParameterSource("content", content);
+    public boolean questionExistsByDescription(String description){
+        final String sql = "SELECT EXISTS(SELECT 1 FROM questions where description=:description)";
+        MapSqlParameterSource param = new MapSqlParameterSource("description", description);
         try {
             return npJdbcTemplate.queryForObject(sql, param, Boolean.class);
         }catch (EmptyResultDataAccessException e){
@@ -312,17 +312,17 @@ public class QuestionRepository extends BaseRepository {
 
         if(choicesUpdateStatus) {
             final StringBuilder sql = new StringBuilder("UPDATE questions SET ");
-            sql.append("content=:content,");
+            sql.append("description=:description,");
             sql.append("enabled=:enabled,");
-            sql.append("proficiency_id=:proficiencyId, ");
+            sql.append("proficiency=:proficiency, ");
             sql.append("topic_id=:topicId, ");
             sql.append("modified_by=:loggedInUserId ");
             sql.append("WHERE id=:id");
 
             MapSqlParameterSource param = new MapSqlParameterSource("id", id)
-                    .addValue("content", question.getContent())
+                    .addValue("description", question.getDescription())
                     .addValue("enabled", question.isEnabled())
-                    .addValue("proficiencyId", question.getProficiencyId())
+                    .addValue("proficiency", question.getProficiency())
                     .addValue("topicId", question.getTopicId())
                     .addValue("id", id)
                     .addValue("loggedInUserId", loggedInUserId);

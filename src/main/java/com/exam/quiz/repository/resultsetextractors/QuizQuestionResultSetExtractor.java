@@ -2,7 +2,6 @@ package com.exam.quiz.repository.resultsetextractors;
 
 import com.exam.question.model.Question;
 import com.exam.question.model.QuestionChoice;
-import com.exam.quiz.model.Quiz;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -21,7 +20,7 @@ public class QuizQuestionResultSetExtractor implements ResultSetExtractor<List<Q
             if(question == null){
                 question = new Question();
                 question.setId(quesId);
-                question.setContent(rs.getString("quesContent"));
+                question.setDescription(rs.getString("quesContent"));
                 questionMap.put(quesId, question);
             }
             List<QuestionChoice> choices = question.getQuestionChoices();
