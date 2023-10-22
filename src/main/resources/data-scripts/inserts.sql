@@ -11,3 +11,6 @@
 --values
 --(nextval('examportal.users_id_seq'::regclass), 'admin', 'admin', 'ADMIN', 'USER', 'admin@demo.com', '123456789', true, '', 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP);
 
+--INSERT INTO examportal.user_role
+--(id, user_id, role_id)
+--VALUES(nextval('examportal.user_role_id_seq'::regclass), 1, 1);
