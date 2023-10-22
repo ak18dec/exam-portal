@@ -9,7 +9,7 @@ public class Subject {
     public Subject() {
     }
 
-    public Subject(int id, String title, String description, int genreId, boolean enabled) {
+    public Subject(int id, String title, boolean enabled) {
         this.id = id;
         this.title = title;
         this.enabled = enabled;
