@@ -23,18 +23,16 @@ public class QuizRepository extends BaseRepository {
 
     @Transactional
     public int addQuiz(Quiz quiz, int loggedInUserId) {
-        final StringBuilder sql = new StringBuilder("INSERT INTO quiz(title, description, published, proficiency_id, max_marks, max_time, instruction_enabled, created_by, modified_by)");
-        sql.append(" VALUES (:title, :description, :published, :proficiencyId, :maxMarks, :maxTime, :instructionEnabled, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO quiz(title, description, published, max_marks, max_time, created_by, modified_by)");
+        sql.append(" VALUES (:title, :description, :published, :maxMarks, :maxTime, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", quiz.getTitle());
         param.addValue("description", quiz.getDescription());
         param.addValue("published", quiz.isPublished());
-        param.addValue("proficiencyId", quiz.getProficiencyId());
         param.addValue("maxMarks", quiz.getMaxMarks());
         param.addValue("maxTime", quiz.getMaxTime());
-        param.addValue("instructionEnabled", quiz.isInstructionEnabled());
         param.addValue("createdBy", loggedInUserId);
         param.addValue("modifiedBy", loggedInUserId);
 
@@ -46,10 +44,6 @@ public class QuizRepository extends BaseRepository {
             if(quizId > 0){
                 if(quiz.getQuestionIds() != null && quiz.getQuestionIds().size() > 0){
                     int[] qqIds = addQuizQuestions(quiz.getQuestionIds(), loggedInUserId, quizId);
-                }
-
-                if(quiz.isInstructionEnabled() && quiz.getInstructionIds() != null && quiz.getInstructionIds().size() > 0){
-                    int[] qiIds = addQuizInstructions(quiz.getInstructionIds(), loggedInUserId, quizId);
                 }
             }
 
@@ -73,18 +67,6 @@ public class QuizRepository extends BaseRepository {
         return npJdbcTemplate.batchUpdate(sql, params.toArray(new MapSqlParameterSource[0]));
     }
 
-    public int[] addQuizInstructions(List<Integer> instructionIds, int loggedInUserId, int quizId){
-        final String sql = "INSERT INTO quiz_instruction(quiz_id, instruction_id) VALUES (:quizId, :instructionId)";
-        List<MapSqlParameterSource> params = new ArrayList<>();
-        for(Integer instr : instructionIds){
-            MapSqlParameterSource source = new MapSqlParameterSource();
-            source.addValue("quizId", quizId);
-            source.addValue("instructionId", instr);
-            params.add(source);
-        }
-        return npJdbcTemplate.batchUpdate(sql, params.toArray(new MapSqlParameterSource[0]));
-    }
-
     //UPDATE QUERIES
 
     @Transactional
@@ -93,7 +75,6 @@ public class QuizRepository extends BaseRepository {
         sql.append("title=:title, ");
         sql.append("description=:description, ");
         sql.append("published=:published, ");
-        sql.append("proficiency_id=:proficiencyId, ");
         sql.append("max_marks=:maxMarks, ");
         sql.append("max_time=:maxTime, ");
         sql.append("modified_by=:loggedInUserId ");
@@ -103,7 +84,6 @@ public class QuizRepository extends BaseRepository {
                 .addValue("title", quiz.getTitle())
                 .addValue("description", quiz.getDescription())
                 .addValue("published", quiz.isPublished())
-                .addValue("proficiencyId", quiz.getProficiencyId())
                 .addValue("maxMarks", quiz.getMaxMarks())
                 .addValue("maxTime", quiz.getMaxTime())
                 .addValue("loggedInUserId", loggedInUserId);
@@ -141,44 +121,6 @@ public class QuizRepository extends BaseRepository {
         }
     }
 
-    @Transactional
-    public boolean updateInstructions(int id, List<Integer> instructionsIds, int loggedInUserId){
-        boolean deleteOldInstructions = deleteInstructions(id);
-        if(deleteOldInstructions){
-            int[] updatedInstructionIds = addQuizInstructions(instructionsIds, loggedInUserId, id);
-            return updatedInstructionIds.length > 0;
-        }
-        return false;
-    }
-
-    @Transactional
-    public boolean toggleInstructions(int id, boolean instructionEnable, List<Integer> instructionIds){
-        final String sql = "UPDATE quiz SET instruction_enabled=:instructionEnable WHERE id=:id";
-        MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("instructionEnable", instructionEnable);
-        param.addValue("id", id);
-        try {
-            boolean instructionToggled = npJdbcTemplate.update(sql, param) > 0;
-            boolean instructionsDeleted = false;
-            if(!instructionEnable && instructionToggled){
-                instructionsDeleted = deleteInstructions(id);
-            }
-            return instructionToggled && instructionsDeleted;
-        } catch (DataAccessException e) {
-            return false;
-        }
-    }
-
-    private boolean deleteInstructions(int quizId){
-        final String sql = "DELETE FROM quiz_instruction WHERE quiz_id=:quizId";
-        final MapSqlParameterSource param = new MapSqlParameterSource("quizId", quizId);
-        try {
-            return npJdbcTemplate.update(sql, param) > 0;
-        } catch (DataAccessException e) {
-            return false;
-        }
-    }
-
     private boolean deleteQuestions(int quizId){
         final String sql = "DELETE FROM quiz_ques WHERE quiz_id=:quizId";
         final MapSqlParameterSource param = new MapSqlParameterSource("quizId", quizId);
@@ -193,12 +135,11 @@ public class QuizRepository extends BaseRepository {
 
     public boolean delete(int id){
         boolean questionsDeleted = deleteQuestions(id);
-        boolean instructionsDeleted = deleteInstructions(id);
         final String sql = "DELETE FROM quiz WHERE id=:id";
         final MapSqlParameterSource param = new MapSqlParameterSource("id", id);
         try{
             boolean quizDeleted = npJdbcTemplate.update(sql, param) > 0;
-            return quizDeleted && questionsDeleted && instructionsDeleted;
+            return quizDeleted && questionsDeleted;
         }catch (DataAccessException e){
             return false;
         }
@@ -212,11 +153,8 @@ public class QuizRepository extends BaseRepository {
             sql.append("select q.* from ( ");
             sql.append("SELECT quiz.* ,'question' QUES_OR_INSTRUCTION , qq.question_id as mapping_id ");
             sql.append("FROM quiz as quiz LEFT JOIN quiz_ques qq on qq.quiz_id = quiz.id ");
-            sql.append("UNION ");
-            sql.append("SELECT quiz.* , 'instruction' QUES_OR_INSTRUCTION, qi.instruction_id as mapping_id ");
-            sql.append("from quiz as quiz LEFT JOIN quiz_instruction qi on qi.quiz_id = quiz.id ");
             sql.append(" ) as q ");
-            sql.append("order by q.id, q.QUES_OR_INSTRUCTION ");
+            sql.append("order by q.id");
 
             return npJdbcTemplate.query(sql.toString(), new QuizResultSetExtractor());
 
@@ -231,11 +169,8 @@ public class QuizRepository extends BaseRepository {
             sql.append("select q.* from ( ");
             sql.append("SELECT quiz.* ,'question' QUES_OR_INSTRUCTION , qq.question_id as mapping_id ");
             sql.append("FROM quiz as quiz LEFT JOIN quiz_ques qq on qq.quiz_id = quiz.id WHERE quiz.id=:id ");
-            sql.append("UNION ");
-            sql.append("SELECT quiz.* , 'instruction' QUES_OR_INSTRUCTION, qi.instruction_id as mapping_id ");
-            sql.append("from quiz as quiz LEFT JOIN quiz_instruction qi on qi.quiz_id = quiz.id WHERE quiz.id=:id ");
             sql.append(" ) as q ");
-            sql.append("order by q.id, q.QUES_OR_INSTRUCTION ");
+            sql.append("order by q.id");
 
             final SqlParameterSource param = new MapSqlParameterSource("id",id);
 
@@ -250,7 +185,7 @@ public class QuizRepository extends BaseRepository {
     public List<Question> findQuestionsByQuizId(int id) {
         try {
             final StringBuilder sql = new StringBuilder();
-            sql.append("SELECT q.id as quesId, q.content as quesContent, ");
+            sql.append("SELECT q.id as quesId, q.description as quesDescription, ");
             sql.append("qc.id as choiceId, qc.description as choice,qc.correct as correctChoice ");
             sql.append("FROM questions q ");
             sql.append("JOIN quiz_ques qq on qq.question_id = q.id ");

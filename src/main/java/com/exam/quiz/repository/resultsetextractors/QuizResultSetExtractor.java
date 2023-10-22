@@ -26,35 +26,19 @@ public class QuizResultSetExtractor implements ResultSetExtractor<List<Quiz>> {
                 quiz.setTitle(rs.getString("title"));
                 quiz.setDescription(rs.getString("description"));
                 quiz.setPublished(rs.getBoolean("published"));
-                quiz.setProficiencyId(rs.getInt("proficiency_id"));
                 quiz.setMaxMarks(rs.getInt("max_marks"));
                 quiz.setMaxTime(rs.getInt("max_time"));
-                quiz.setInstructionEnabled(rs.getBoolean("instruction_enabled"));
                 quizMap.put(quizId, quiz);
             }
 
-            String type = rs.getString("QUES_OR_INSTRUCTION");
-
-            if("question".equalsIgnoreCase(type)){
-                List<Integer> questionIds = quiz.getQuestionIds();
-                if(questionIds == null){
-                    questionIds = new ArrayList<>();
-                    quiz.setQuestionIds(questionIds);
-                }
-                int quesId = rs.getInt("mapping_id");
-                if(quesId > 0) {
-                    questionIds.add(quesId);
-                }
-            }else if("instruction".equalsIgnoreCase(type)){
-                List<Integer> instructionsIds = quiz.getInstructionIds();
-                if(instructionsIds == null){
-                    instructionsIds = new ArrayList<>();
-                    quiz.setInstructionIds(instructionsIds);
-                }
-                int instructionId = rs.getInt("mapping_id");
-                if(instructionId > 0) {
-                    instructionsIds.add(instructionId);
-                }
+            List<Integer> questionIds = quiz.getQuestionIds();
+            if(questionIds == null){
+                questionIds = new ArrayList<>();
+                quiz.setQuestionIds(questionIds);
+            }
+            int quesId = rs.getInt("mapping_id");
+            if(quesId > 0) {
+                questionIds.add(quesId);
             }
         }
         return new ArrayList<>(quizMap.values());

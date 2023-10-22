@@ -8,9 +8,6 @@ public class Quiz {
     private String title;
     private String description;
     private List<Integer> questionIds;
-    private int proficiencyId;
-    private boolean instructionEnabled;
-    private List<Integer> instructionIds;
     private int maxMarks;
     private int maxTime;
     private boolean published;
@@ -19,15 +16,11 @@ public class Quiz {
 
     }
 
-    public Quiz(int id, String title, String description, List<Integer> questionIds, int proficiencyId, boolean instructionEnabled,
-                List<Integer> instructionIds, int maxMarks, int maxTime, boolean published) {
+    public Quiz(int id, String title, String description, List<Integer> questionIds, int maxMarks, int maxTime, boolean published) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.questionIds = questionIds;
-        this.proficiencyId = proficiencyId;
-        this.instructionEnabled = instructionEnabled;
-        this.instructionIds = instructionIds;
         this.maxMarks = maxMarks;
         this.maxTime = maxTime;
         this.published = published;
@@ -65,30 +58,6 @@ public class Quiz {
         this.questionIds = questionIds;
     }
 
-    public int getProficiencyId() {
-        return proficiencyId;
-    }
-
-    public void setProficiencyId(int proficiencyId) {
-        this.proficiencyId = proficiencyId;
-    }
-
-    public boolean isInstructionEnabled() {
-        return instructionEnabled;
-    }
-
-    public void setInstructionEnabled(boolean instructionEnabled) {
-        this.instructionEnabled = instructionEnabled;
-    }
-
-    public List<Integer> getInstructionIds() {
-        return instructionIds;
-    }
-
-    public void setInstructionIds(List<Integer> instructionIds) {
-        this.instructionIds = instructionIds;
-    }
-
     public int getMaxMarks() {
         return maxMarks;
     }
@@ -120,9 +89,6 @@ public class Quiz {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", questionIds=" + questionIds.toString() +
-                ", proficiencyId=" + proficiencyId +
-                ", instructionEnabled=" + instructionEnabled +
-                ", instructionIds=" + instructionIds.toString() +
                 ", maxMarks=" + maxMarks +
                 ", maxTime=" + maxTime +
                 ", published=" + published +

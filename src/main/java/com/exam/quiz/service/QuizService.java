@@ -50,9 +50,6 @@ public class QuizService {
         List<Integer> oldQuestions = quizOldData.getQuestionIds();
         List<Integer> newQuestions = quiz.getQuestionIds();
 
-        List<Integer> oldInstructions = quizOldData.getInstructionIds();
-        List<Integer> newInstructions = quiz.getInstructionIds();
-
         if(oldQuestions != null && !oldQuestions.isEmpty()){
             boolean sameQuestions = oldQuestions.equals(newQuestions);
             if(!sameQuestions){
@@ -62,24 +59,11 @@ public class QuizService {
             int[] newQuesIds = addQuizQuestions(newQuestions, quizId, 1);
         }
 
-        if(oldInstructions != null && !oldInstructions.isEmpty()){
-            boolean sameInstructions = oldInstructions.equals(newInstructions);
-            if(!sameInstructions){
-                quizRepository.updateInstructions(quizId, newInstructions, 1);
-            }
-        }else{
-            int[] newInstrIds = addQuizInstructions(newInstructions, quizId, 1);
-        }
-
         return quizRepository.updateQuiz(quizId, quiz, 1);
     }
 
     public int[] addQuizQuestions(List<Integer> quesIds, int quizId, int loggedInUserId) {
         return quizRepository.addQuizQuestions(quesIds, loggedInUserId, quizId);
-    }
-
-    public int[] addQuizInstructions(List<Integer> instructionIds, int quizId, int loggedInUserId) {
-        return quizRepository.addQuizInstructions(instructionIds, loggedInUserId, quizId);
     }
 
     public List<Question> getQuestionsByQuizId(Integer quizId) {

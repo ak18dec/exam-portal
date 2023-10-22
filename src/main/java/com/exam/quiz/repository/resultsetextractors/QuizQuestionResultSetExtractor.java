@@ -20,7 +20,7 @@ public class QuizQuestionResultSetExtractor implements ResultSetExtractor<List<Q
             if(question == null){
                 question = new Question();
                 question.setId(quesId);
-                question.setDescription(rs.getString("quesContent"));
+                question.setDescription(rs.getString("quesDescription"));
                 questionMap.put(quesId, question);
             }
             List<QuestionChoice> choices = question.getQuestionChoices();
