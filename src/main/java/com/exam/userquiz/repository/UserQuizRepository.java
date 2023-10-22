@@ -27,8 +27,8 @@ public class UserQuizRepository extends BaseRepository {
         }
 
         final StringBuilder sql = new StringBuilder("INSERT INTO user_attempted_quiz ");
-        sql.append("(attempted_quiz_id, user_id, user_full_name, username, attempted_on, proficiency, max_marks, max_time, user_time, score)");
-        sql.append(" VALUES (:quizId, :userId, :userFullName, :username, :attemptedOn, :proficiency, :maxMarks, :maxTime, :userTime, :score");
+        sql.append("(attempted_quiz_id, user_id, user_full_name, username, attempted_on, max_marks, max_time, user_time, score)");
+        sql.append(" VALUES (:quizId, :userId, :userFullName, :username, :attemptedOn, :maxMarks, :maxTime, :userTime, :score");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
@@ -41,7 +41,6 @@ public class UserQuizRepository extends BaseRepository {
         param.addValue("maxTime", userAttemptedQuiz.getMaxTime());
         param.addValue("userTime", userAttemptedQuiz.getUserTime());
         param.addValue("score", userAttemptedQuiz.getScore());
-        param.addValue("proficiency", userAttemptedQuiz.getProficiency());
 
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
