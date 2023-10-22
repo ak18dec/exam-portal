@@ -21,13 +21,12 @@ public class TopicRepository extends BaseRepository {
     //CREATE QUERIES
 
     public int addTopic(Topic topic, int loggedInUserId){
-        final StringBuilder sql = new StringBuilder("INSERT INTO topics(title, description, enabled, subject_id, created_by, modified_by)");
-        sql.append(" VALUES (:title,:description,:enabled,:subjectId, :createdBy, :modifiedBy");
+        final StringBuilder sql = new StringBuilder("INSERT INTO topics(title, enabled, subject_id, created_by, modified_by)");
+        sql.append(" VALUES (:title,:enabled,:subjectId, :createdBy, :modifiedBy");
         sql.append(") RETURNING id");
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("title", topic.getTitle());
-        param.addValue("description", topic.getDescription());
         param.addValue("enabled", topic.isEnabled());
         param.addValue("subjectId", topic.getSubjectId());
         param.addValue("createdBy", loggedInUserId);
@@ -140,7 +139,6 @@ public class TopicRepository extends BaseRepository {
     public boolean updateTopic(int id, Topic topic, int loggedInUserId){
         final StringBuilder sql = new StringBuilder("UPDATE topics SET ");
         sql.append("title=:title,");
-        sql.append("description=:description,");
         sql.append("enabled=:enabled,");
         sql.append("subject_id=:subjectId, ");
         sql.append("modified_by=:loggedInUserId ");
@@ -148,7 +146,6 @@ public class TopicRepository extends BaseRepository {
 
         MapSqlParameterSource param = new MapSqlParameterSource("id",id)
                 .addValue("title", topic.getTitle())
-                .addValue("description", topic.getDescription())
                 .addValue("enabled", topic.isEnabled())
                 .addValue("subjectId", topic.getSubjectId())
                 .addValue("id", id)
